@@ -12,6 +12,8 @@
   X(f4, XK_F4) \
   X(a,  XK_a) \
   X(d,  XK_d) \
+  X(o,  XK_o) \
+  X(p,  XK_p) \
   X(s,  XK_s) \
   X(w,  XK_w)
 

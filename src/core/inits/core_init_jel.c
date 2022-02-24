@@ -1,4 +1,6 @@
 #include "anim/anim.h"
+#include "components/components.h"
+#include "gfx/sprite.h"
 
 /*
  * CORE INIT STATE
@@ -7,11 +9,15 @@
  */
 
 #define INIT_COMPONENT_LIST \
-  X(Sprite)
+  X(Position) \
+  X(SpriteO) \
+  X(Sprite) \
+  X(Animation) \
+  X(Fixed) \
 
 static int init_components(void)
 {
-  #define X(component) JEL_COMPONENT_REGISTER(component);
+  #define X(component) JEL_REGISTER(component);
   INIT_COMPONENT_LIST
   #undef X
   return 0;

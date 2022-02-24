@@ -175,7 +175,7 @@ struct JIN_Window * JIN_window_create(void)
   window->attribs.override_redirect = True;
   window->attribs.colormap          = XCreateColormap(JIN_env.x_display, RootWindow(JIN_env.x_display, JIN_env.screen_id), window->visual->visual, AllocNone);
   window->attribs.event_mask        = ExposureMask;
-  window->window = XCreateWindow(JIN_env.x_display, RootWindow(JIN_env.x_display, JIN_env.screen_id), 0, 0, 480, 320, 0, window->visual->depth, InputOutput, window->visual->visual, CWBackPixel | CWColormap | CWBorderPixel | CWEventMask, &window->attribs);
+  window->window = XCreateWindow(JIN_env.x_display, RootWindow(JIN_env.x_display, JIN_env.screen_id), 0, 0, 960, 640, 0, window->visual->depth, InputOutput, window->visual->visual, CWBackPixel | CWColormap | CWBorderPixel | CWEventMask, &window->attribs);
 
   XSelectInput(JIN_env.x_display, window->window, KeyPressMask | KeyReleaseMask);
   XSetWMProtocols(JIN_env.x_display, window->window, &JIN_env.wm_delete_window, 1);

@@ -15,19 +15,21 @@
  * struct JIN_Animd | Animation data
  */
 struct JIN_Animd {
-  /* Information for meta sprites */
-  int32_t   rows;
-  int32_t   cols;
   /* Acutal info */
-  int32_t   anim_nums;
-  char     *names;       /* Name of the animation */
-  int32_t  *frame_nums;  /* Number of frames in each animation */
-  int32_t **ids;         /* Sprite ids */
-  int32_t **frame_ticks; /* Frame durations */
+  uint32_t   anim_nums;
+  char       *names;       /* Name of the animation */
+  uint32_t   *frame_nums;  /* Number of frames in each animation */
+  uint32_t (**data)[4];    /* Sprite info */
+  uint32_t  **frame_ticks; /* Frame durations */
 };
 
-JEL_COMPONENT_DEFINE(Sprite, struct JIN_Animd *, animd, int32_t, anim, int32_t, ticks, int32_t, frame)
-JEL_COMPONENT_EXTERN(Sprite)
+struct Animation {
+  struct JIN_Animd *animd;
+  uint32_t anim;
+  uint32_t ticks;
+  uint32_t frame;
+};
+JEL_COMPONENT(Animation, animd, anim, ticks, frame);
 
 /*
  * Animation functions
@@ -42,11 +44,9 @@ int JIN_animd_destroy(struct JIN_Animd *animd);
  * ECS functions
  *
  * update | Game loop update for animations
- * draw   | Game loop draw for animations
  * set    | Set the animation to play
  */
 int JIN_anim_update(void);
-int JIN_anim_draw(void);
-int JIN_anim_set(JEL_Entity entity, const char *animation);
+int JIN_anim_set   (JEL_Entity entity, const char *animation);
 
 #endif

@@ -6,16 +6,23 @@
  * 
  * All input information
  */
+#define JIN_KEYS \
+  X(f1) \
+  X(f2) \
+  X(f3) \
+  X(f4) \
+  X(a) \
+  X(d) \
+  X(o) \
+  X(p) \
+  X(s) \
+  X(w) \
+
 
 struct JIN_Keys {
-  int f1;
-  int f2;
-  int f3;
-  int f4;
-  int a;
-  int d;
-  int s;
-  int w;
+  #define X(key) int key;
+  JIN_KEYS
+  #undef X
 };
 
 struct JIN_Input {
@@ -23,6 +30,7 @@ struct JIN_Input {
   struct JIN_Keys keys;
 };
 
+/* TODO Make this better */
 #define JIN_INPUT_INIT(input) \
   input.quit = 0; \
   input.keys.f1 = 0; \
@@ -31,8 +39,13 @@ struct JIN_Input {
   input.keys.f4 = 0; \
   input.keys.a  = 0; \
   input.keys.d  = 0; \
+  input.keys.o  = 0; \
+  input.keys.p  = 0; \
   input.keys.s  = 0; \
   input.keys.w  = 0; \
+
+/* No need to implement this */
+int JIN_input_sync(struct JIN_Input *in, struct JIN_Input *in_v);
 
 /*
  * JIN_input_loop

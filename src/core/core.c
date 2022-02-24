@@ -1,9 +1,12 @@
+#define JEL_REGISTER_COMPONENTS
+
 #include "core.h"
 #include "gll/gll.h"
 #include "time.h"
 #include "thread/thread.h"
 #include "logger/logger.h"
 
+#include "gfx/gfx.h"
 
 #include <JEL/jel.h>
 #include "../resm/resm.h"
@@ -37,6 +40,7 @@ int JIN_init(void)
 
   if (JIN_env_init(&JIN_env)) ERR_EXIT(-1, "Could not initialize the environment");
   if (!(root = JIN_window_create())) ERR_EXIT(-1, "Could not create the root window");
+  JIN_window_size_set(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
   JIN_INPUT_INIT(JIN_inputv);
   JIN_INPUT_INIT(JIN_input);
@@ -68,6 +72,8 @@ int JIN_quit(void)
 {
   /* QUIT */
   LOG(LOG, "Quitting core (closing libraries and singletons)");
+  JIN_gfx_quit();
+  
   JIN_sndbgm_destroy(&JIN_sndbgm);
   STM_m_destroy(&JIN_stmm);
   STM_t_destroy(&JIN_stmt);
@@ -92,7 +98,7 @@ void JIN_tick(void)
 
   frame_start = clock();
 
-  JIN_input = JIN_inputv;
+  JIN_input_sync(&JIN_input, &JIN_inputv);
   JIN_update();
   JIN_draw();
 
@@ -189,12 +195,16 @@ JIN_THREAD_FN JIN_game_thread(void *data)
   //glEnable(GL_DEBUG_OUTPUT);
   //glDebugMessageCallback(gl_err_callback, 0);
   glEnable(GL_DEPTH_TEST);
- 
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   init_components();
   init_resources();
   init_states();
 
-  JIN_stm_queue("ANIMATION", 0);
+  JIN_gfx_init();
+
+  JIN_stm_queue("3D", 0);
 
   JIN_sndbgm_play();
   /* GAME LOOP */
@@ -220,12 +230,16 @@ int JIN_web_loop(void)
 
   /* INITIALIZE */
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   init_components();
   init_resources();
   init_states();
 
-  JIN_stm_queue("ANIMATION", 0);
+  JIN_gfx_init();
+  
+  JIN_stm_queue("MAIN_MENU", 0);
 
   JIN_sndbgm_play();
   /* GAME LOOP */

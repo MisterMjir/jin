@@ -370,13 +370,20 @@ int STM_m_pop(struct STM_M *manager)
  */
 int STM_m_pop_until(struct STM_M *manager, const char *name)
 {
-  while (manager->count > 0) {
+  while (manager->count > 1) {
     if (!strcmp(manager->names[manager->count - 1], name)) {
       break;
     }
-    STM_m_pop(manager);
+    /* Pop function but only sets the state to alive if it's the one being searched */
+    if (manager->alive[manager->count - 1]) {
+      if (STATE_FN(0, destroy)) return -1;
+    }
+    free(manager->names[manager->count - 1]);
+    manager->alive[manager->count - 1] = 0;
+    --manager->count;
   }
 
+  /* On searched state, make it alive if it isn't */
   if (!manager->alive[manager->count - 1]) {
     STATE_FN(0, create);
     manager->alive[manager->count - 1] = 1;
@@ -416,6 +423,7 @@ int STM_m_update(struct STM_M *manager)
  * @return
  *   Success
  */
+#include "core/logger/logger.h"
 int STM_m_draw(struct STM_M *manager)
 {
   if (manager->states[manager->count - 1].flags & STM_DRAW_PREV) {
