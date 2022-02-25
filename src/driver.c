@@ -3,7 +3,7 @@
 
 int main(int argc, char *args[])
 {
-  JIN_init();
+  if (JIN_init()) return -1;
 
   struct JIN_Thread *game_thread;
   if (!(game_thread = JIN_thread_create(JIN_game_thread))) {

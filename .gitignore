@@ -8,6 +8,7 @@ libs/
 
 # Editor Stuff
 .clangd
+*.bak
 
 # CMake Stuff
 CMakeFiles/

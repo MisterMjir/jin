@@ -26,7 +26,7 @@ struct JIN_Window;
  *   Pointer to window on success
  *   NULL on failure
  */
-struct JIN_Window * JIN_window_create     (void);
+struct JIN_Window * JIN_window_create     (int w, int h);
 
 /*
  * JIN_window_destroy

@@ -16,6 +16,7 @@
 
 #include "window/window.h"
 #include "env/env.h"
+#include "err/err.h"
 
 struct JIN_Window *root; /* Root window */
 struct JIN_Env     env; /* Environment variables */
@@ -36,26 +37,27 @@ struct JIN_Input JIN_input;
  */
 int JIN_init(void)
 {
+  if (JIN_err_core(JIN_ERR_BEG, "Initializing core")) return -1;
+  
   if (JIN_logger_init(JIN_LOGGER_CONSOLE, JIN_LOGGER_LOG | JIN_LOGGER_ERR)) return 0;
-
-  if (JIN_env_init(&JIN_env)) ERR_EXIT(-1, "Could not initialize the environment");
-  if (!(root = JIN_window_create())) ERR_EXIT(-1, "Could not create the root window");
-  JIN_window_size_set(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+  /* Core */
+  if (JIN_env_init(&JIN_env))                                   { JIN_err_core(JIN_ERR_LOG, "JIN::CORE Could not initialize the environment"); return -1; }
+  if (!(root = JIN_window_create(WINDOW_WIDTH, WINDOW_HEIGHT))) { JIN_err_core(JIN_ERR_LOG, "JIN::CORE Could not create a window"); return -1; }
 
   JIN_INPUT_INIT(JIN_inputv);
   JIN_INPUT_INIT(JIN_input);
 
   /* Libraries */
-  LOG(LOG, "Initializing libraries");
-  if (JIN_snd_init())                 ERR_EXIT(0, "Could not initialize Sound");
-  if (JEL_init())                     ERR_EXIT(0, "Could not initialize JEL");
+  if (JIN_snd_init()) { JIN_err_core(JIN_ERR_LOG, "JIN::CORE Could not initialize Sound"); return -1; }
+  if (JEL_init())     { JIN_err_core(JIN_ERR_LOG, "JIN::CORE Could not initialize JEL"); return -1; }
 
   /* Singletons */
-  LOG(LOG, "Creating singletons");
-  if (RESM_create(&JIN_resm))                             ERR_EXIT(0, "Could not create a resource manager");
-  if (STM_t_create(&JIN_stmt))                            ERR_EXIT(0, "Could not create a state table");
-  if (STM_m_create(&JIN_stmm, &JIN_stmt))                 ERR_EXIT(0, "Could not create a state stack");
-  if (JIN_sndbgm_create(&JIN_sndbgm, "res/sounds/L.wav")) ERR_EXIT(0, "Could not create background music");
+  if (RESM_create(&JIN_resm))                             { JIN_err_core(JIN_ERR_LOG, "JIN::CORE Could not create a resource manager"); return -1; }
+  if (STM_t_create(&JIN_stmt))                            { JIN_err_core(JIN_ERR_LOG, "JIN::CORE Could not create a state table"); return -1; }
+  if (STM_m_create(&JIN_stmm, &JIN_stmt))                 { JIN_err_core(JIN_ERR_LOG, "JIN::CORE Could not create a state stack"); return -1; }
+  if (JIN_sndbgm_create(&JIN_sndbgm, "res/sounds/L.wav")) { JIN_err_core(JIN_ERR_LOG, "JIN::CORE Could not create background music"); return -1; }
+  
+  if (JIN_err_core(JIN_ERR_END, "Core initialized successfully")) return -1;
 
   return 0;
 }

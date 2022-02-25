@@ -21,6 +21,7 @@ add_executable(${PROJECT_NAME}
   ${CMAKE_CURRENT_LIST_DIR}/src/core/core.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/globals.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/env/env.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/core/err/err.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/gll/gll.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/input/input.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/logger/logger.c
@@ -63,7 +64,7 @@ if (EMSCRIPTEN)
 
 elseif (MSVC)
   set(CORE_LIBS "opengl32")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /D_CRT_SECURE_NO_WARNINGS")
 
 elseif (UNIX)
   set(CORE_LIBS "-lX11 -lGL -lpthread -lm")

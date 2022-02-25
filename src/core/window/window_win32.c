@@ -1,7 +1,7 @@
 #include "window.h"
 #include <Windows.h>
 #include "../env/env.h"
-#include <stdio.h>
+#include "../err/err.h"
 #include <GL/gl.h>
 #include <GL/wgl.h>
 
@@ -19,7 +19,7 @@ struct JIN_Window {
  * @return
  */
 PFNWGLCREATECONTEXTATTRIBSARBPROC wgl_create_context_attribs_arb = NULL;
-static int JIN_window_gl_setup(struct JIN_Window *window)
+static int JIN_window_gl_setup(struct JIN_Window *window, int w, int h)
 {
   /* Create the temp window/context */
   HWND temp_window = CreateWindow("window_temp", "Temp Window", WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
@@ -38,42 +38,42 @@ static int JIN_window_gl_setup(struct JIN_Window *window)
 
   int temp_pfd_id = ChoosePixelFormat(temp_device_context, &temp_pfd);
   if (!temp_pfd_id) {
-    fprintf(stderr, "ChoosePixelFormat failed\n");
+    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW ChoosePixelFormat failed");
     return -1;
   }
 
   if (!SetPixelFormat(temp_device_context, temp_pfd_id, &temp_pfd)) {
-    fprintf(stderr, "SetPixelFormat failed\n");
+    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW SetPixelFormat failed");
     return -1;
   }
 
   HGLRC temp_rc = wglCreateContext(temp_device_context);
 
   if (!temp_rc) {
-    fprintf(stderr, "wglCreateContext failed\n");
+    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wglCreateContext failed");
     return -1;
   }
 
   if (!wglMakeCurrent(temp_device_context, temp_rc)) {
-    fprintf(stderr, "wglMakeCurrent failed\n");
+    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wglMakeCurrent failed");
     return -1;
   }
 
   PFNWGLCHOOSEPIXELFORMATARBPROC wgl_choose_pixel_format_arb = NULL;
   wgl_choose_pixel_format_arb = (PFNWGLCHOOSEPIXELFORMATARBPROC) wglGetProcAddress("wglChoosePixelFormatARB");
   if (!wgl_choose_pixel_format_arb) {
-    fprintf(stderr, "wglGetProcAddress failed\n");
+    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wglGetProcAddress failed");
     return -1;
   }
 
   //PFNWGLCREATECONTEXTATTRIBSARBPROC wgl_create_context_attribs_arb = NULL;
   wgl_create_context_attribs_arb = (PFNWGLCREATECONTEXTATTRIBSARBPROC) wglGetProcAddress("wglCreateContextAttribsARB");
   if (!wgl_create_context_attribs_arb) {
-    fprintf(stderr, "wglGetProcAddress failed\n");
+    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wglGetProcAddress failed");
     return -1;
   }
 
-  RECT wr = { 0, 0, 640, 480 };
+  RECT wr = { 0, 0, w, h };
   AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX, FALSE);
   window->handle = CreateWindow("window_core", "Hay", WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX,
     CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
@@ -101,7 +101,7 @@ static int JIN_window_gl_setup(struct JIN_Window *window)
   int status = wgl_choose_pixel_format_arb(window->device_context, pixel_attribs, NULL, 1, &pixel_format_id, &formats_num);
 
   if (!status || formats_num == 0) {
-    fprintf(stderr, "wgl_choose_pixel_format failed");
+    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WNDOW wgl_choose_pixel_format failed");
     return -1;
   }
 
@@ -117,16 +117,16 @@ static int JIN_window_gl_setup(struct JIN_Window *window)
   return 0;
 }
 
-struct JIN_Window * JIN_window_create(void)
+struct JIN_Window * JIN_window_create(int w, int h)
 {
   struct JIN_Window *window;
 
   if (!(window = malloc(sizeof(struct JIN_Window)))) {
-    fprintf(stderr, "Out of memory\n");
+    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW Out of memory");
     return NULL;
   }
 
-  JIN_window_gl_setup(window);
+  JIN_window_gl_setup(window, w, h);
 
   ShowWindow(window->handle, SW_NORMAL);
 
@@ -164,11 +164,11 @@ int JIN_window_gl_set(struct JIN_Window *window)
 
   HGLRC rc = wgl_create_context_attribs_arb(window->device_context, 0, context_attribs);
   if (!rc) {
-    fprintf(stderr, "wgl_create_context_attribs_arb failed\n");
+    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wgl_create_context_attribs_arb failed");
     return -1;
   }
   if (!wglMakeCurrent(window->device_context, rc)) {
-    fprintf(stderr, "wglMakeCurrent failed \n");
+    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wglMakeCurrent failed");
     return -1;
   }
 
