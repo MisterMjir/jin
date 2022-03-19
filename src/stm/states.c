@@ -181,6 +181,7 @@ static int td_fn_draw(struct STM_S *state)
   return 0;
 }
 
+#include "core/log/log.h"
 int JIN_states_create_3d(struct STM_S *state)
 {
   unsigned int *shader = JIN_resm_get("3d_shader");
@@ -192,6 +193,9 @@ int JIN_states_create_3d(struct STM_S *state)
   glUniformMatrix4fv(glGetUniformLocation(*shader, "projection"), 1, GL_FALSE, (float *) projection);
 
   if (STM_s_create(state, 0, td_fn_create, td_fn_destroy, td_fn_update, td_fn_draw)) return -1;
+
+  JN_LOG("Testing log");
+  JN_QLOG("Testing qlog\n");
 
   return 0;
 }

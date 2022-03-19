@@ -1,5 +1,5 @@
 #include "env.h"
-#include "../err/err.h"
+#include "../log/log.h"
 
 LRESULT CALLBACK window_procedure(HWND hwnd, UINT u_msg, WPARAM w_param, LPARAM l_param)
 {
@@ -21,7 +21,7 @@ int JIN_env_init(struct JIN_Env* env)
 {
   /* Get the current HINSTANCE */
   if (!(env->main_instance = GetModuleHandle(NULL))) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::ENV Could not get the module. Error %lu", GetLastError());
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::ENV Could not get the module. Error %lu", GetLastError());
     return -1;
   }
 
@@ -40,7 +40,7 @@ int JIN_env_init(struct JIN_Env* env)
   wc.lpszClassName = "window_core";
 
   if (!RegisterClass(&wc)) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::ENV Could not register class. Error %lu", GetLastError());
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::ENV Could not register class. Error %lu", GetLastError());
     return -1;
   }
 
@@ -58,7 +58,7 @@ int JIN_env_init(struct JIN_Env* env)
   wc.lpszClassName = "window_temp";
 
   if (!RegisterClass(&wc)) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::ENV Could not register class. Error %lu", GetLastError());
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::ENV Could not register class. Error %lu", GetLastError());
     return -1;
   }
 

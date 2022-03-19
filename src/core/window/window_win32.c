@@ -1,7 +1,7 @@
 #include "window.h"
 #include <Windows.h>
 #include "../env/env.h"
-#include "../err/err.h"
+#include "../log/log.h"
 #include <GL/gl.h>
 #include <GL/wgl.h>
 
@@ -38,38 +38,38 @@ static int JIN_window_gl_setup(struct JIN_Window *window, int w, int h)
 
   int temp_pfd_id = ChoosePixelFormat(temp_device_context, &temp_pfd);
   if (!temp_pfd_id) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW ChoosePixelFormat failed");
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::WINDOW ChoosePixelFormat failed");
     return -1;
   }
 
   if (!SetPixelFormat(temp_device_context, temp_pfd_id, &temp_pfd)) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW SetPixelFormat failed");
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::WINDOW SetPixelFormat failed");
     return -1;
   }
 
   HGLRC temp_rc = wglCreateContext(temp_device_context);
 
   if (!temp_rc) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wglCreateContext failed");
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::WINDOW wglCreateContext failed");
     return -1;
   }
 
   if (!wglMakeCurrent(temp_device_context, temp_rc)) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wglMakeCurrent failed");
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::WINDOW wglMakeCurrent failed");
     return -1;
   }
 
   PFNWGLCHOOSEPIXELFORMATARBPROC wgl_choose_pixel_format_arb = NULL;
   wgl_choose_pixel_format_arb = (PFNWGLCHOOSEPIXELFORMATARBPROC) wglGetProcAddress("wglChoosePixelFormatARB");
   if (!wgl_choose_pixel_format_arb) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wglGetProcAddress failed");
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::WINDOW wglGetProcAddress failed");
     return -1;
   }
 
   //PFNWGLCREATECONTEXTATTRIBSARBPROC wgl_create_context_attribs_arb = NULL;
   wgl_create_context_attribs_arb = (PFNWGLCREATECONTEXTATTRIBSARBPROC) wglGetProcAddress("wglCreateContextAttribsARB");
   if (!wgl_create_context_attribs_arb) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wglGetProcAddress failed");
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::WINDOW wglGetProcAddress failed");
     return -1;
   }
 
@@ -101,7 +101,7 @@ static int JIN_window_gl_setup(struct JIN_Window *window, int w, int h)
   int status = wgl_choose_pixel_format_arb(window->device_context, pixel_attribs, NULL, 1, &pixel_format_id, &formats_num);
 
   if (!status || formats_num == 0) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WNDOW wgl_choose_pixel_format failed");
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::WNDOW wgl_choose_pixel_format failed");
     return -1;
   }
 
@@ -122,7 +122,7 @@ struct JIN_Window * JIN_window_create(int w, int h)
   struct JIN_Window *window;
 
   if (!(window = malloc(sizeof(struct JIN_Window)))) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW Out of memory");
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::WINDOW Out of memory");
     return NULL;
   }
 
@@ -164,11 +164,11 @@ int JIN_window_gl_set(struct JIN_Window *window)
 
   HGLRC rc = wgl_create_context_attribs_arb(window->device_context, 0, context_attribs);
   if (!rc) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wgl_create_context_attribs_arb failed");
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::WINDOW wgl_create_context_attribs_arb failed");
     return -1;
   }
   if (!wglMakeCurrent(window->device_context, rc)) {
-    JIN_err_core(JIN_ERR_LOG, "JIN::CORE::WINDOW wglMakeCurrent failed");
+    jn_log_core(JN_LOG_LOG, "JIN::CORE::WINDOW wglMakeCurrent failed");
     return -1;
   }
 

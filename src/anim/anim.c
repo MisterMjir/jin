@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include "core/err/err.h"
+#include "core/log/log.h"
 
 #include "gfx/gfx.h"
 
@@ -18,26 +18,26 @@
  * @return
  */
 #define READ(var, count) \
-    if (fread(var, sizeof(*var), count, file) != count) { JIN_err("Could not read from .animd file"); return -1; }
+    if (fread(var, sizeof(*var), count, file) != count) { jn_log("Could not read from .animd file"); return -1; }
 int JIN_animd_create(struct JIN_Animd *animd, const char *fpath)
 {
   FILE   *file;
 
-  if (!(file = fopen(fpath, "rb"))) { JIN_err("Could not open .animd file: %s", fpath); return -1; }
+  if (!(file = fopen(fpath, "rb"))) { jn_log("Could not open .animd file: %s", fpath); return -1; }
 
   READ(&animd->anim_nums, 1);
 
-  if (!(animd->names       = malloc(animd->anim_nums * (8 * sizeof(char      ))))) { JIN_err("Out of memory"); return -1; }
-  if (!(animd->frame_nums  = malloc(animd->anim_nums * (    sizeof(uint32_t  ))))) { JIN_err("Out of memory"); return -1; }
-  if (!(animd->data        = malloc(animd->anim_nums * (    sizeof(uint32_t *))))) { JIN_err("Out of memory"); return -1; }
-  if (!(animd->frame_ticks = malloc(animd->anim_nums * (    sizeof(uint32_t *))))) { JIN_err("Out of memory"); return -1; }
+  if (!(animd->names       = malloc(animd->anim_nums * (8 * sizeof(char      ))))) { jn_log("Out of memory"); return -1; }
+  if (!(animd->frame_nums  = malloc(animd->anim_nums * (    sizeof(uint32_t  ))))) { jn_log("Out of memory"); return -1; }
+  if (!(animd->data        = malloc(animd->anim_nums * (    sizeof(uint32_t *))))) { jn_log("Out of memory"); return -1; }
+  if (!(animd->frame_ticks = malloc(animd->anim_nums * (    sizeof(uint32_t *))))) { jn_log("Out of memory"); return -1; }
 
   /* Loop through every animation */
   for (int32_t i = 0; i < animd->anim_nums; ++i) {
     READ(&animd->names[i * 8], 8);
     READ(&animd->frame_nums[i], 1);
-    if (!(animd->data[i]        = malloc(animd->frame_nums[i] * 4 * sizeof(uint32_t)))) { JIN_err("Out of memory"); return -1; }
-    if (!(animd->frame_ticks[i] = malloc(animd->frame_nums[i]     * sizeof(uint32_t)))) { JIN_err("Out of memory"); return -1; }
+    if (!(animd->data[i]        = malloc(animd->frame_nums[i] * 4 * sizeof(uint32_t)))) { jn_log("Out of memory"); return -1; }
+    if (!(animd->frame_ticks[i] = malloc(animd->frame_nums[i]     * sizeof(uint32_t)))) { jn_log("Out of memory"); return -1; }
     /* Loop through each frame */
     for (uint32_t j = 0; j < animd->frame_nums[i]; ++j) {
       READ(&animd->frame_ticks[i][j], 1);

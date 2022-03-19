@@ -21,9 +21,9 @@ add_executable(${PROJECT_NAME}
   ${CMAKE_CURRENT_LIST_DIR}/src/core/core.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/globals.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/env/env.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/core/err/err.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/gll/gll.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/input/input.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/core/log/log.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/logger/logger.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/thread/thread.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/window/window.c
