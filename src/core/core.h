@@ -1,5 +1,5 @@
-#ifndef JIN_CORE_H
-#define JIN_CORE_H
+#ifndef JN_CORE_H
+#define JN_CORE_H
 
 #include "input/input.h"
 #include "logger/logger.h"

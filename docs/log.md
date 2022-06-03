@@ -99,7 +99,7 @@ Cleans up logger resources.
 ```int jn_log(const char *fmt, ...)```
 
 Logs to the ```log.txt``` file. Note if the logger fails, there really isn't a way to output the failure.
-Since it is not too severe of an error, nothing will be done if the log function fails so it will just be
+Since it is not too severe of an error, nothing will be done so if the log function fails so it will just be
 undefined behavior.
 
 ##### params

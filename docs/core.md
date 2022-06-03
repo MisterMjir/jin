@@ -6,7 +6,7 @@ If any part of core fails to work, the engine will fail to work
 
 Submodules
 - [env]() (Environment)
-- [err](err.md) (Error/Logging)
+- [log](log.md) (Error/Logging)
 - [gll]() (OpenGL Loader)
 - [input]() (Input)
 - [thread]() (Threading)
