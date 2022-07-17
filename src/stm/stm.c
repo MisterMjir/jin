@@ -490,18 +490,18 @@ dequeue:
  * JIN functions
  */
 #include "core/globals.h"
-int JIN_stm_queue(const char *name, uint8_t flags)
+int jn_stm_queue(const char *name, uint8_t flags)
 {
-  return STM_m_queue(&JIN_stmm, name, flags);
+  return STM_m_queue(&jn_stmm, name, flags);
 }
 
-int JIN_stm_switch(void)
+int jn_stm_switch(void)
 {
-  return STM_m_switch(&JIN_stmm);
+  return STM_m_switch(&jn_stmm);
 }
 
-int JIN_stm_add(const char *name, STM_S_Constructor constructor)
+int jn_stm_add(const char *name, STM_S_Constructor constructor)
 {
-  STM_t_add(&JIN_stmt, name, constructor);
+  STM_t_add(&jn_stmt, name, constructor);
   return 0;
 }

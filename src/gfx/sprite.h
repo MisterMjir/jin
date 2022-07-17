@@ -1,5 +1,5 @@
-#ifndef JIN_SPRITE_H
-#define JIN_SPRITE_H
+#ifndef JN_SPRITE_H
+#define JN_SPRITE_H
 
 #include <JEL/jel.h>
 
@@ -28,9 +28,9 @@ struct SpriteO {
 };
 JEL_COMPONENT(SpriteO, z, w, h, tx, ty, tw, th, dir);
 
-int JIN_gfx_sprite_init(void);
-int JIN_gfx_sprite_quit(void);
+int jn_gfx_sprite_init(void);
+int jn_gfx_sprite_quit(void);
 
-int JIN_gfx_sprite_draw(int x, int y);
+int jn_gfx_sprite_draw(int x, int y);
 
 #endif

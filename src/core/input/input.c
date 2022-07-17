@@ -8,17 +8,20 @@
   #include "input_em.c"
 #endif
 
+struct jn_input jn_inputv; /* Volatile input */
+struct jn_input jn_input; /* Input on the current tick */
+
 /*
  * JIN_input_sync
  *
  * @desc
  *   Updates regular input with volatile input
  */
-int JIN_input_sync(struct JIN_Input *in, struct JIN_Input *in_v)
+int jn_input_sync(struct jn_input *in, struct jn_input *in_v)
 {
   in->quit = in_v->quit;
   #define X(key) in->keys.key = in->keys.key * in_v->keys.key + in_v->keys.key;
-  JIN_KEYS
+  JN_KEYS
   #undef X
 
   return 0;

@@ -14,7 +14,7 @@
   X(s,  0x53) \
   X(w,  0x57)
 
-int JIN_input_loop(void)
+int jn_input_loop(void)
 {
   MSG msg;
   while (GetMessage(&msg, NULL, 0, 0)) {
@@ -24,14 +24,14 @@ int JIN_input_loop(void)
     switch (msg.message) {
       case WM_KEYDOWN:
         switch (msg.wParam) {
-          #define X(jink, sym) case sym: JIN_inputv.keys.jink = 1; break;
+          #define X(jink, sym) case sym: jn_inputv.keys.jink = 1; break;
           SYM_LIST
           #undef X
         }
         break;
       case WM_KEYUP:
         switch (msg.wParam) {
-          #define X(jink, sym) case sym: JIN_inputv.keys.jink = 0; break;
+          #define X(jink, sym) case sym: jn_inputv.keys.jink = 0; break;
             SYM_LIST
           #undef X
         }
@@ -39,7 +39,7 @@ int JIN_input_loop(void)
     }
   }
   /* Message was WM_QUIT */
-  JIN_inputv.quit = 1;
+  jn_inputv.quit = 1;
 
   return 0;
 }

@@ -10,4 +10,4 @@
   #error Platform not supported (JIN Env)
 #endif
 
-struct JIN_Env JIN_env;
+struct jn_env jn_env;

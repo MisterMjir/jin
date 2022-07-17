@@ -1,5 +1,5 @@
 #include <Windows.h>
 
-struct JIN_Env {
+struct jn_env {
   HINSTANCE main_instance;
 };

@@ -13,7 +13,7 @@ enum jn_log {
 
 int  jn_log_core(enum jn_log flag, const char *fmt, ...);
 int  jn_log_init(void);
-void jn_loq_quit(void);
+void jn_log_quit(void);
 int  jn_log     (const char *fmt, ...);
 
 #ifdef JN_DEV

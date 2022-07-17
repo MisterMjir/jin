@@ -12,22 +12,22 @@
 
 /* GFX FUNCTIONS */
 
-int JIN_gfx_init(void)
+int jn_gfx_init(void)
 {
-  JIN_gfx_sprite_init();
+  jn_gfx_sprite_init();
 
   return 0;
 }
 
-int JIN_gfx_quit(void)
+int jn_gfx_quit(void)
 {
-  JIN_gfx_sprite_quit();
+  jn_gfx_sprite_quit();
 
   return 0;
 }
 
 /*
- * JIN_gfx_draw_sprite
+ * jn_gfx_draw_sprite
  *
  * @desc
  *   TODO: Figure out a way to batch sprites instead of
@@ -44,7 +44,7 @@ int JIN_gfx_quit(void)
  * @param t_h
  * @return
  */
-int JIN_gfx_draw_sprite(unsigned int *shader, unsigned int *texture, int x, int y, int w, int h, int t_x, int t_y, int t_w, int t_h)
+int jn_gfx_draw_sprite(unsigned int *shader, unsigned int *texture, int x, int y, int w, int h, int t_x, int t_y, int t_w, int t_h)
 {
   glUseProgram(*shader);
 
@@ -61,7 +61,7 @@ int JIN_gfx_draw_sprite(unsigned int *shader, unsigned int *texture, int x, int 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, *texture);
 
-  glBindVertexArray(((struct JIN_Model *) JIN_resm_get("GFX_sprite_model"))->vao);
+  glBindVertexArray(((struct jn_model *) jn_resm_get("GFX_sprite_model"))->vao);
   glDrawArrays(GL_TRIANGLES, 0, 6);
   glBindVertexArray(0);
 

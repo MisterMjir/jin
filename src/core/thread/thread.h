@@ -1,5 +1,5 @@
-#ifndef JIN_THREAD_H
-#define JIN_THREAD_H
+#ifndef JN_THREAD_H
+#define JN_THREAD_H
 
 /*
  * THREAD
@@ -26,14 +26,14 @@
  */
 
 #ifdef __unix__
-  #define JIN_THREAD_FN void *
+  #define JN_THREAD_FN void *
 #elif _WIN32
-  #define JIN_THREAD_FN unsigned int
+  #define JN_THREAD_FN unsigned int
 #else
   #error Platform not supported (JIN Thread)
 #endif
 
-struct JIN_Thread;
+struct jn_thread;
 
 /*
  * Thread functions
@@ -51,7 +51,7 @@ struct JIN_Thread;
  * @param fn
  * @return
  */
-struct JIN_Thread * JIN_thread_create (JIN_THREAD_FN (*fn)(void *));
+struct jn_thread * jn_thread_create (JN_THREAD_FN (*fn)(void *));
 
 /*
  * JIN_thread_destroy
@@ -62,7 +62,7 @@ struct JIN_Thread * JIN_thread_create (JIN_THREAD_FN (*fn)(void *));
  * @param thread
  * @return
  */
-int                 JIN_thread_destroy(struct JIN_Thread *thread);
+int                 jn_thread_destroy(struct jn_thread *thread);
 
 /*
  * JIN_thread_join
@@ -71,7 +71,7 @@ int                 JIN_thread_destroy(struct JIN_Thread *thread);
  * @param thread
  * @return
  */
-int                 JIN_thread_join   (struct JIN_Thread *thread);
+int                 jn_thread_join   (struct jn_thread *thread);
 
 /*
  * JIN_sleep
@@ -84,6 +84,6 @@ int                 JIN_thread_join   (struct JIN_Thread *thread);
  * @return
  *   0 on success
  */
-int                 JIN_sleep         (double time);
+int                 jn_sleep         (double time);
 
 #endif

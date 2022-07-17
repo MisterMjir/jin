@@ -12,10 +12,10 @@ struct Camera {
   int y;
 };
 
-extern struct RESM_M     JIN_resm;
-extern struct STM_T      JIN_stmt;
-extern struct STM_M      JIN_stmm;
-extern struct JIN_Sndbgm JIN_sndbgm;
+extern struct RESM_M  jn_resm;
+extern struct STM_T   jn_stmt;
+extern struct STM_M   jn_stmm;
+extern struct snd_bgm jn_sndbgm;
 
 #define WINDOW_WIDTH  960
 #define WINDOW_HEIGHT 640

@@ -23,12 +23,12 @@ static ALCdevice  *device;
 /* SOUND FUNCTIONS */
 
 /*
- * JIN_snd_init
+ * snd_init
  *
  * @desc
  * @return
  */
-int JIN_snd_init(void)
+int snd_init(void)
 {
   /* Device and context */
   if (!(device = alcOpenDevice(NULL))) ERR_EXIT(-1, "Could not open an ALCdevice");
@@ -40,12 +40,12 @@ int JIN_snd_init(void)
 }
 
 /*
- * JIN_snd_quit
+ * snd_quit
  *
  * @desc
  * @return
  */
-int JIN_snd_quit(void)
+int snd_quit(void)
 {
   alcMakeContextCurrent(NULL);
   alcDestroyContext(context);
@@ -57,24 +57,24 @@ int JIN_snd_quit(void)
 /* SFX FUNCTIONS */
 
 /*
- * JIN_sndsfx_create
+ * sndsfx_create
  *
  * @desc
  * @param sfx
  * @param fpath
  * @return
  */
-int JIN_sndsfx_create(struct JIN_Sndsfx *sfx, const char *fpath)
+int snd_sfx_create(struct snd_sfx *sfx, const char *fpath)
 {
   char           *data;
-  struct JIN_Wavd wav_data;
+  struct snd_wavd wav_data;
 
-  if (JIN_wav_load(fpath, &wav_data, &data, NULL)) ERR_EXIT(-1, "Could not load the wav file: %s", fpath);
+  if (snd_wav_load(fpath, &wav_data, &data, NULL)) ERR_EXIT(-1, "Could not load the wav file: %s", fpath);
 
   alGenBuffers(1, &sfx->buffer);
 
   ALenum format;
-  JIN_wav_format(&wav_data, &format);
+  snd_wav_format(&wav_data, &format);
 
   alBufferData(sfx->buffer, format, data, wav_data.size, wav_data.sample_rate);
   free(data);
@@ -83,13 +83,13 @@ int JIN_sndsfx_create(struct JIN_Sndsfx *sfx, const char *fpath)
 }
 
 /*
- * JIN_sndsfx_destroy
+ * sndsfx_destroy
  *
  * @desc
  * @param sfx
  * @return
  */
-int JIN_sndsfx_destroy(struct JIN_Sndsfx *sfx)
+int snd_sfx_destroy(struct snd_sfx *sfx)
 {
   alDeleteBuffers(1, &sfx->buffer);
   return 0;
@@ -100,13 +100,13 @@ int JIN_sndsfx_destroy(struct JIN_Sndsfx *sfx)
 #include "../core/globals.h"
 
 /*
- * JIN_sndbgm_update
+ * snd_bgm_update
  *
  * @desc
  * @param bgm
  * @return
  */
-int JIN_sndbgm_update(struct JIN_Sndbgm *bgm)
+int snd_bgm_update(struct snd_bgm *bgm)
 {
   ALint buffers_processed = 0;
   alGetSourcei(bgm->source, AL_BUFFERS_PROCESSED, &buffers_processed);
@@ -145,18 +145,18 @@ int JIN_sndbgm_update(struct JIN_Sndbgm *bgm)
 }
 
 /*
- * JIN_sndbgm_create
+ * snd_bgm_create
  *
  * @desc
  * @param bgm
  * @param fpath
  * @return
  */
-int JIN_sndbgm_create(struct JIN_Sndbgm *bgm, const char *fpath)
+int snd_bgm_create(struct snd_bgm *bgm, const char *fpath)
 {
-  struct JIN_Wavd wav_data;
+  struct snd_wavd wav_data;
   
-  if (JIN_wav_load(fpath, &wav_data, NULL, &bgm->data_size)) ERR_EXIT(-1, "Could not load wav file: %s", fpath);
+  if (snd_wav_load(fpath, &wav_data, NULL, &bgm->data_size)) ERR_EXIT(-1, "Could not load wav file: %s", fpath);
 
   if (!(bgm->file = fopen(fpath, "rb"))) ERR_EXIT(-1, "Could not open wav file: %s", fpath);
   if (fseek(bgm->file, bgm->data_start, SEEK_SET)) ERR_EXIT(-1, "Could not seek wav file");
@@ -166,7 +166,7 @@ int JIN_sndbgm_create(struct JIN_Sndbgm *bgm, const char *fpath)
   if (!(bgm->buffers = malloc(BUFFERS_NUM * sizeof(ALuint)))) ERR_EXIT(-1, "Out of memory");
   alGenBuffers(BUFFERS_NUM, bgm->buffers);
 
-  JIN_wav_format(&wav_data, &bgm->format);
+  snd_wav_format(&wav_data, &bgm->format);
 
   /* Audio data must be bigger than BUFFERS_NUM * BUFFERS_SIZE */
   if (bgm->data_size < BUFFERS_NUM * BUFFERS_SIZE) ERR_EXIT(-1, "Out of memory");
@@ -183,19 +183,19 @@ int JIN_sndbgm_create(struct JIN_Sndbgm *bgm, const char *fpath)
   alSource3f(bgm->source, AL_VELOCITY, 0, 0, 0);
   alSourcei(bgm->source, AL_LOOPING, AL_FALSE);
 
-  alSourceQueueBuffers(JIN_sndbgm.source, BUFFERS_NUM, JIN_sndbgm.buffers);
+  alSourceQueueBuffers(jn_sndbgm.source, BUFFERS_NUM, jn_sndbgm.buffers);
 
   return 0;
 }
 
 /*
- * JIN_sndsbgm_destroy
+ * sndsbgm_destroy
  *
  * @desc
  * @param bgm
  * @return
  */
-int JIN_sndbgm_destroy(struct JIN_Sndbgm *bgm)
+int snd_bgm_destroy(struct snd_bgm *bgm)
 {
   alDeleteSources(1, &bgm->source);
 
@@ -207,56 +207,56 @@ int JIN_sndbgm_destroy(struct JIN_Sndbgm *bgm)
 }
 
 /*
- * JIN_sndbgm_set
+ * snd_bgm_set
  *
  * @desc
  * @param bgm
  * @return
  */
-int JIN_sndbgm_set(const char *fpath)
+int snd_bgm_set(const char *fpath)
 {
-  JIN_sndbgm_destroy(&JIN_sndbgm);
-  JIN_sndbgm_create(&JIN_sndbgm, fpath);
+  snd_bgm_destroy(&jn_sndbgm);
+  snd_bgm_create(&jn_sndbgm, fpath);
   
   return 0;
 }
 
 /*
- * JIN_sndbgm_play
+ * snd_bgm_play
  *
  * @desc
  * @return
  */
-int JIN_sndbgm_play(void)
+int snd_bgm_play(void)
 {
-  alSourcePlay(JIN_sndbgm.source);
+  alSourcePlay(jn_sndbgm.source);
 
   return 0;
 }
 
 /*
- * JIN_sndbgm_stop
+ * snd_bgm_stop
  *
  * @desc
  * @return
  */
-int JIN_sndbgm_stop(void)
+int snd_bgm_stop(void)
 {
-  alSourcePause(JIN_sndbgm.source);
+  alSourcePause(jn_sndbgm.source);
 
   return 0;
 }
 
 /*
- * JIN_sndbgm_state
+ * snd_bgm_state
  *
  * @desc
  * @return
  */
-int JIN_sndbgm_state(void)
+int snd_bgm_state(void)
 {
   ALenum state;
-  alGetSourcei(JIN_sndbgm.source, AL_SOURCE_STATE, &state);
+  alGetSourcei(jn_sndbgm.source, AL_SOURCE_STATE, &state);
 
   return state == AL_PLAYING;
 }

@@ -13,7 +13,7 @@
 
 static int init_states(void)
 {
-  #define X(name, fn) JIN_stm_add(name, fn);
+  #define X(name, fn) jn_stm_add(name, fn);
   INIT_STATE_LIST
   #undef X
   return 0;

@@ -1,5 +1,5 @@
-#ifndef JIN_SND_H
-#define JIN_SND_H
+#ifndef SND_H
+#define SND_H
 
 #include <AL/al.h>
 #include <stdint.h>
@@ -15,15 +15,15 @@
  * sound effects (sfx)
  *
  * TYPES:
- * struct JIN_Sndsfx | Sound effects (OpenAL buffer, not source)
- * struct JIN_Sndbgm | Background music
+ * struct jn_Sndsfx | Sound effects (OpenAL buffer, not source)
+ * struct jn_Sndbgm | Background music
  */
 
-struct JIN_Sndsfx {
+struct snd_sfx {
   ALuint buffer; 
 };
 
-struct JIN_Sndbgm {
+struct snd_bgm {
   FILE   *file;
   ALuint *buffers;
   ALenum  format;
@@ -40,8 +40,8 @@ struct JIN_Sndbgm {
  * quit   | Quit sound
  * update | Update for bgm
  */
-int JIN_snd_init(void);
-int JIN_snd_quit(void);
+int snd_init(void);
+int snd_quit(void);
 
 /*
  * Sfx functions
@@ -49,8 +49,8 @@ int JIN_snd_quit(void);
  * create  | Create a sfx
  * destroy | Destroy a sfx
  */
-int JIN_sndsfx_create (struct JIN_Sndsfx *sfx, const char *fpath);
-int JIN_sndsfx_destroy(struct JIN_Sndsfx *sfx);
+int snd_sfx_create (struct snd_sfx *sfx, const char *fpath);
+int snd_sfx_destroy(struct snd_sfx *sfx);
 
 /*
  * Bgm functions
@@ -63,12 +63,12 @@ int JIN_sndsfx_destroy(struct JIN_Sndsfx *sfx);
  * stop    | Stop/pause the bgm
  * state   | Is bgm playing
  */
-int JIN_sndbgm_update (struct JIN_Sndbgm *bgm);
-int JIN_sndbgm_create (struct JIN_Sndbgm *bgm, const char *fpath);
-int JIN_sndbgm_destroy(struct JIN_Sndbgm *bgm);
-int JIN_sndbgm_set    (const char *fpath);
-int JIN_sndbgm_play   (void);
-int JIN_sndbgm_stop   (void);
-int JIN_sndbgm_state  (void);
+int snd_bgm_update (struct snd_bgm *bgm);
+int snd_bgm_create (struct snd_bgm *bgm, const char *fpath);
+int snd_bgm_destroy(struct snd_bgm *bgm);
+int snd_bgm_set    (const char *fpath);
+int snd_bgm_play   (void);
+int snd_bgm_stop   (void);
+int snd_bgm_state  (void);
 
 #endif

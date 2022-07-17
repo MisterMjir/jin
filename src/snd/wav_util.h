@@ -1,17 +1,17 @@
-#ifndef JIN_WAV_UTIL_H
-#define JIN_WAV_UTIL_H
+#ifndef SND_WAV_UTIL_H
+#define SND_WAV_UTIL_H
 
 #include <stdint.h>
 #include <AL/al.h>
 
-struct JIN_Wavd {
+struct snd_wavd {
   uint8_t channels;
   int32_t sample_rate;
   uint8_t bits_per_sample;
   int32_t size;
 };
 
-int JIN_wav_load  (const char *fpath, struct JIN_Wavd *data, char **buffer, int32_t *data_start);
-int JIN_wav_format(struct JIN_Wavd *data, ALenum *format);
+int snd_wav_load  (const char *fpath, struct snd_wavd *data, char **buffer, int32_t *data_start);
+int snd_wav_format(struct snd_wavd *data, ALenum *format);
 
 #endif

@@ -135,8 +135,8 @@ int STM_m_switch   (struct STM_M *manager);
 /*
  * JIN functions
  */
-int JIN_stm_queue (const char *name, uint8_t flags);
-int JIN_stm_switch(void);
-int JIN_stm_add   (const char *name, STM_S_Constructor);
+int jn_stm_queue (const char *name, uint8_t flags);
+int jn_stm_switch(void);
+int jn_stm_add   (const char *name, STM_S_Constructor);
 
 #endif

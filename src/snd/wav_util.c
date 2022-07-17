@@ -24,7 +24,7 @@
 #define READ(var, count) if (fread(var, sizeof(*var), count, file) != count) ERR_EXIT(-1, "Could not read in wav file");
 #define CHECK(text, count) (strncmp(temp, text, count))
 #define SEEK(var, loc) if (fseek(file, var, loc)) ERR_EXIT(-1, "Could not seek in wav file");
-int JIN_wav_load(const char *fpath, struct JIN_Wavd *data, char **buffer, int32_t *data_start)
+int snd_wav_load(const char *fpath, struct snd_wavd *data, char **buffer, int32_t *data_start)
 {
   FILE    *file;
   char     temp[4];
@@ -99,7 +99,7 @@ int JIN_wav_load(const char *fpath, struct JIN_Wavd *data, char **buffer, int32_
  * @param format
  *   Variable to hold the format
  */
-int JIN_wav_format(struct JIN_Wavd *data, ALenum *format)
+int snd_wav_format(struct snd_wavd *data, ALenum *format)
 {
   if (data->channels == 1 && data->bits_per_sample == 8)
     *format = AL_FORMAT_MONO8;

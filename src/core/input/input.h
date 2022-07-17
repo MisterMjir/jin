@@ -1,12 +1,12 @@
-#ifndef JIN_INPUT_H
-#define JIN_INPUT_H
+#ifndef JN_INPUT_H
+#define JN_INPUT_H
 
 /*
  * INPUT
  * 
  * All input information
  */
-#define JIN_KEYS \
+#define JN_KEYS \
   X(f1) \
   X(f2) \
   X(f3) \
@@ -19,19 +19,22 @@
   X(w) \
 
 
-struct JIN_Keys {
+struct jn_keys {
   #define X(key) int key;
-  JIN_KEYS
+  JN_KEYS
   #undef X
 };
 
-struct JIN_Input {
+struct jn_input {
   int quit;
-  struct JIN_Keys keys;
+  struct jn_keys keys;
 };
 
+extern struct jn_input jn_inputv; /* Volatile Input */
+extern struct jn_input jn_input; /* "Frame" Input */
+
 /* TODO Make this better */
-#define JIN_INPUT_INIT(input) \
+#define JN_INPUT_INIT(input) \
   input.quit = 0; \
   input.keys.f1 = 0; \
   input.keys.f2 = 0; \
@@ -45,7 +48,7 @@ struct JIN_Input {
   input.keys.w  = 0; \
 
 /* No need to implement this */
-int JIN_input_sync(struct JIN_Input *in, struct JIN_Input *in_v);
+int jn_input_sync(struct jn_input *in, struct jn_input *in_v);
 
 /*
  * JIN_input_loop
@@ -55,6 +58,6 @@ int JIN_input_sync(struct JIN_Input *in, struct JIN_Input *in_v);
  *   a 'quit' input
  * @return
  */
-int JIN_input_loop(void);
+int jn_input_loop(void);
 
 #endif

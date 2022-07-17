@@ -5,26 +5,26 @@
 #include <GL/gl.h>
 #include <GL/wgl.h>
 
-struct JIN_Window {
+struct jn_window {
   HWND handle;
   HDC  device_context;
   HGLRC rendering_context;
 };
 
 /*
- * JIN_window_gl_setup
+ * jn_window_gl_setup
  * 
  * @desc
  * @param window
  * @return
  */
 PFNWGLCREATECONTEXTATTRIBSARBPROC wgl_create_context_attribs_arb = NULL;
-static int JIN_window_gl_setup(struct JIN_Window *window, int w, int h)
+static int jn_window_gl_setup(struct jn_window *window, int w, int h)
 {
   /* Create the temp window/context */
   HWND temp_window = CreateWindow("window_temp", "Temp Window", WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
     0, 0, 1, 1,
-    NULL, NULL, JIN_env.main_instance, NULL);
+    NULL, NULL, jn_env.main_instance, NULL);
   HDC temp_device_context = GetDC(temp_window);
   PIXELFORMATDESCRIPTOR temp_pfd;
   ZeroMemory(&temp_pfd, sizeof(temp_pfd));
@@ -77,7 +77,7 @@ static int JIN_window_gl_setup(struct JIN_Window *window, int w, int h)
   AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX, FALSE);
   window->handle = CreateWindow("window_core", "Hay", WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX,
     CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
-    NULL, NULL, JIN_env.main_instance, NULL);
+    NULL, NULL, jn_env.main_instance, NULL);
 
   window->device_context = GetDC(window->handle);
 
@@ -117,23 +117,23 @@ static int JIN_window_gl_setup(struct JIN_Window *window, int w, int h)
   return 0;
 }
 
-struct JIN_Window * JIN_window_create(int w, int h)
+struct jn_window * jn_window_create(int w, int h)
 {
-  struct JIN_Window *window;
+  struct jn_window *window;
 
-  if (!(window = malloc(sizeof(struct JIN_Window)))) {
+  if (!(window = malloc(sizeof(struct jn_window)))) {
     jn_log_core(JN_LOG_LOG, "JIN::CORE::WINDOW Out of memory");
     return NULL;
   }
 
-  JIN_window_gl_setup(window, w, h);
+  jn_window_gl_setup(window, w, h);
 
   ShowWindow(window->handle, SW_NORMAL);
 
   return window;
 }
 
-int JIN_window_destroy(struct JIN_Window *window)
+int jn_window_destroy(struct jn_window *window)
 {
   wglMakeCurrent(NULL, NULL);
   wglDeleteContext(window->rendering_context);
@@ -145,14 +145,14 @@ int JIN_window_destroy(struct JIN_Window *window)
   return 0;
 }
 
-int JIN_window_buffer_swap(struct JIN_Window *window)
+int jn_window_buffer_swap(struct jn_window *window)
 {
   SwapBuffers(window->device_context);
 
   return 0;
 }
 
-int JIN_window_gl_set(struct JIN_Window *window)
+int jn_window_gl_set(struct jn_window *window)
 {
   const int version_major = 3, version_minor = 3;
   int context_attribs[] = {
@@ -175,13 +175,13 @@ int JIN_window_gl_set(struct JIN_Window *window)
   return 0;
 }
 
-int JIN_window_gl_unset(struct JIN_Window *window)
+int jn_window_gl_unset(struct jn_window *window)
 {
   /* This is a TODO */
   return 0;
 }
 
-int JIN_window_size_set(struct JIN_Window *window, int w, int h)
+int jn_window_size_set(struct jn_window *window, int w, int h)
 {
   RECT wr = { 0, 0, w, h };
   AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX, FALSE);
@@ -191,7 +191,7 @@ int JIN_window_size_set(struct JIN_Window *window, int w, int h)
   return 0;
 }
 
-int JIN_window_size_get(struct JIN_Window *window, int *w, int *h)
+int jn_window_size_get(struct jn_window *window, int *w, int *h)
 {
   RECT rect;
   GetWindowRect(window->handle, &rect);
@@ -202,7 +202,7 @@ int JIN_window_size_get(struct JIN_Window *window, int *w, int *h)
   return 0;
 }
 
-int JIN_window_dialog(struct JIN_Window* window, const char* msg)
+int jn_window_dialog(struct jn_window* window, const char* msg)
 {
   MessageBox(window->handle, msg, NULL, MB_OK | MB_SYSTEMMODAL | MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
 

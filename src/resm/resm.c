@@ -91,13 +91,13 @@ void RESM_destroy(struct RESM_M *resm)
         JIN_texture_destroy(resm->resources[i]);
         break;
       case RESM_MODEL:
-        JIN_model_destory(resm->resources[i]);
+        jn_model_destory(resm->resources[i]);
         break;
       case RESM_ANIM:
-        JIN_animd_destroy(resm->resources[i]);
+        jn_animd_destroy(resm->resources[i]);
         break;
       case RESM_SFX:
-        JIN_sndsfx_destroy(resm->resources[i]);
+        snd_sfx_destroy(resm->resources[i]);
         break;
     }
 
@@ -150,16 +150,16 @@ int RESM_add(struct RESM_M *resm, const char *name, const char *fpath, enum RESM
       JIN_texture_create(resm->resources[resm->count], fpath);
       break;
     case RESM_MODEL:
-      RES_MALLOC(struct JIN_Model);
-      JIN_model_create(resm->resources[resm->count], fpath);
+      RES_MALLOC(struct jn_model);
+      jn_model_create(resm->resources[resm->count], fpath);
       break;
     case RESM_ANIM:
-      RES_MALLOC(struct JIN_Animd);
-      JIN_animd_create(resm->resources[resm->count], fpath);
+      RES_MALLOC(struct jn_animd);
+      jn_animd_create(resm->resources[resm->count], fpath);
       break;
     case RESM_SFX:
-      RES_MALLOC(struct JIN_Sndsfx);
-      JIN_sndsfx_create(resm->resources[resm->count], fpath);
+      RES_MALLOC(struct snd_sfx);
+      snd_sfx_create(resm->resources[resm->count], fpath);
       break;
   }
 
@@ -200,12 +200,12 @@ void * RESM_get(struct RESM_M *resm, const char *name)
  * the global JIN_resm RESM_M
  */
 #include "core/globals.h"
-int JIN_resm_add(const char *name, const char *fpath, enum RESM_T type)
+int jn_resm_add(const char *name, const char *fpath, enum RESM_T type)
 {
-  return RESM_add(&JIN_resm, name, fpath, type);
+  return RESM_add(&jn_resm, name, fpath, type);
 }
 
-void * JIN_resm_get(const char *name)
+void * jn_resm_get(const char *name)
 {
-  return RESM_get(&JIN_resm, name);
+  return RESM_get(&jn_resm, name);
 }

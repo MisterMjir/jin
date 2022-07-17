@@ -1,6 +1,7 @@
 #include "states.h"
 #include "resm/resm.h"
 #include "core/core.h"
+#include "core/input/input.h"
 #include "snd/snd.h"
 #include "gfx/gfx.h"
 #include "core/gll/gll.h"
@@ -13,7 +14,7 @@ static JEL_Entity player;
 /* IMAGE STATE */
 static int img_fn_create(struct STM_S *state)
 {
-  unsigned int *shader = JIN_resm_get("sprite_shader");
+  unsigned int *shader = jn_resm_get("sprite_shader");
 
   glUseProgram(*shader);
 
@@ -29,8 +30,8 @@ static int img_fn_destroy(struct STM_S *state)
 
 static int img_fn_update(struct STM_S *state)
 {
-  if (JIN_input.keys.d == 1) {
-    JIN_stm_queue("ANIMATION", 0);
+  if (jn_input.keys.d == 1) {
+    jn_stm_queue("ANIMATION", 0);
   }
   return 0;
 }
@@ -41,17 +42,17 @@ static int img_fn_draw(struct STM_S *state)
   unsigned int *shader;
   unsigned int *texture;
 
-  shader = JIN_resm_get("sprite_shader");
-  texture = JIN_resm_get("test_image");
-  JIN_gfx_draw_sprite(shader, texture, 16, 16, 256, 256, 0, 0, 256, 256);
-  JIN_gfx_draw_sprite(shader, texture, 16, 256, 256, 256, 32, 32, 224, 224);
+  shader = jn_resm_get("sprite_shader");
+  texture = jn_resm_get("test_image");
+  jn_gfx_draw_sprite(shader, texture, 16, 16, 256, 256, 0, 0, 256, 256);
+  jn_gfx_draw_sprite(shader, texture, 16, 256, 256, 256, 32, 32, 224, 224);
 
   return 0;
 }
 
 int JIN_states_create_img(struct STM_S *state)
 {
-  unsigned int *shader = JIN_resm_get("sprite_shader");
+  unsigned int *shader = jn_resm_get("sprite_shader");
 
   glUseProgram(*shader);
 
@@ -67,7 +68,7 @@ int JIN_states_create_img(struct STM_S *state)
 /* ANIMATION STATE */
 static int animation_fn_create(struct STM_S *state)
 {
-  unsigned int *shader = JIN_resm_get("sprite_shader");
+  unsigned int *shader = jn_resm_get("sprite_shader");
 
   glUseProgram(*shader);
 
@@ -78,7 +79,7 @@ static int animation_fn_create(struct STM_S *state)
   player = JEL_entity_create();
   /*
   JEL_ADD(player, Sprite);
-  JEL_SET(player, Sprite, animd, JIN_resm_get("player_animation"));
+  JEL_SET(player, Sprite, animd, jn_resm_get("player_animation"));
   JEL_SET(player, Sprite, anim, 0);
   JEL_SET(player, Sprite, frame, 0);
   JEL_SET(player, Sprite, ticks, 0);
@@ -96,10 +97,10 @@ static int animation_fn_destroy(struct STM_S *state)
 
 static int animation_fn_update(struct STM_S *state)
 {
-  if (JIN_input.keys.d == 1) {
-    JIN_stm_queue("3D", 0);
+  if (jn_input.keys.d == 1) {
+    jn_stm_queue("3D", 0);
   }
-  JIN_anim_update();
+  jn_anim_update();
 
   return 0;
 }
@@ -109,10 +110,10 @@ static int animation_fn_draw(struct STM_S *state)
   unsigned int *shader;
   unsigned int *texture;
 
-  shader = JIN_resm_get("sprite_shader");
-  texture = JIN_resm_get("test_image");
+  shader = jn_resm_get("sprite_shader");
+  texture = jn_resm_get("test_image");
 
-  //JIN_anim_draw();
+  //jn_anim_draw();
 
   return 0;
 }
@@ -138,8 +139,8 @@ static int td_fn_destroy(struct STM_S *state)
 
 static int td_fn_update(struct STM_S *state)
 {
-  if (JIN_input.keys.d == 1) {
-    JIN_stm_queue("IMG", 0);
+  if (jn_input.keys.d == 1) {
+    jn_stm_queue("IMG", 0);
   }
   ++ticks;
 
@@ -151,7 +152,7 @@ static int td_fn_draw(struct STM_S *state)
   unsigned int *shader;
 
   /* 3d fun */
-  shader = JIN_resm_get("3d_shader");
+  shader = jn_resm_get("3d_shader");
   glUseProgram(*shader);
   vec3 vec = {0.0f, 0.0f, 0.0f};
   mat4 model = GLM_MAT4_IDENTITY_INIT;
@@ -175,7 +176,7 @@ static int td_fn_draw(struct STM_S *state)
   glUniform3f(glGetUniformLocation(*shader, "light_color"), 1.0f, 1.0f, 1.0f);
   glUniform3f(glGetUniformLocation(*shader, "light_pos"), 4.0f, 0.0f, -40.0f);
 
-  glBindVertexArray(((struct JIN_Model *) JIN_resm_get("3d_spaceship"))->vao);
+  glBindVertexArray(((struct jn_model *) jn_resm_get("3d_spaceship"))->vao);
   glDrawArrays(GL_TRIANGLES, 0, 78);
 
   return 0;
@@ -184,7 +185,7 @@ static int td_fn_draw(struct STM_S *state)
 #include "core/log/log.h"
 int JIN_states_create_3d(struct STM_S *state)
 {
-  unsigned int *shader = JIN_resm_get("3d_shader");
+  unsigned int *shader = jn_resm_get("3d_shader");
 
   glUseProgram(*shader);
 

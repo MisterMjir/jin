@@ -35,7 +35,7 @@ unsigned int sprite_indices[MAX_SPRITES * 6];
 float buffer[VERTEX_ATTRIBS * MAX_SPRITES * 4];
 #endif
 
-int JIN_gfx_sprite_init(void)
+int jn_gfx_sprite_init(void)
 {
   /* Set up indices */
   for (unsigned int i = 0; i < MAX_SPRITES; ++i) {
@@ -48,10 +48,10 @@ int JIN_gfx_sprite_init(void)
   }
 
   /* Resources */
-  JIN_resm_add("sprite_shader", "res/shaders/sprite.shdr", RESM_SHADER);
-  JIN_resm_add("spritesheet", "res/images/spritesheet.png", RESM_PNG);
+  jn_resm_add("sprite_shader", "res/shaders/sprite.shdr", RESM_SHADER);
+  jn_resm_add("spritesheet", "res/images/spritesheet.png", RESM_PNG);
 
-  unsigned int *shader = JIN_resm_get("sprite_shader");
+  unsigned int *shader = jn_resm_get("sprite_shader");
 
   glUseProgram(*shader);
 
@@ -88,7 +88,7 @@ int JIN_gfx_sprite_init(void)
   return 0;
 }
 
-int JIN_gfx_sprite_quit(void)
+int jn_gfx_sprite_quit(void)
 {
   /* GL objects */
   glBindVertexArray(0);
@@ -261,8 +261,8 @@ int JIN_gfx_sprite_draw(int x, int y)
 
 int JIN_gfx_sprite_draw(int x, int y)
 {
-  unsigned int *shader = JIN_resm_get("sprite_shader");
-  unsigned int *texture = JIN_resm_get("spritesheet");
+  unsigned int *shader = jn_resm_get("sprite_shader");
+  unsigned int *texture = jn_resm_get("spritesheet");
 
   update_fixed(x, y);
 

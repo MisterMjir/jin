@@ -1,5 +1,5 @@
-#ifndef JIN_ANIM_H
-#define JIN_ANIM_H
+#ifndef JN_ANIM_H
+#define JN_ANIM_H
 
 #include <stdint.h>
 #include <JEL/jel.h>
@@ -14,7 +14,7 @@
  * TYPES:
  * struct JIN_Animd | Animation data
  */
-struct JIN_Animd {
+struct jn_animd {
   /* Acutal info */
   uint32_t   anim_nums;
   char       *names;       /* Name of the animation */
@@ -24,7 +24,7 @@ struct JIN_Animd {
 };
 
 struct Animation {
-  struct JIN_Animd *animd;
+  struct jn_animd *animd;
   uint32_t anim;
   uint32_t ticks;
   uint32_t frame;
@@ -37,8 +37,8 @@ JEL_COMPONENT(Animation, animd, anim, ticks, frame);
  * create  |
  * destroy |
  */
-int JIN_animd_create (struct JIN_Animd *animd, const char *fpath);
-int JIN_animd_destroy(struct JIN_Animd *animd);
+int jn_animd_create (struct jn_animd *animd, const char *fpath);
+int jn_animd_destroy(struct jn_animd *animd);
 
 /*
  * ECS functions
@@ -46,7 +46,7 @@ int JIN_animd_destroy(struct JIN_Animd *animd);
  * update | Game loop update for animations
  * set    | Set the animation to play
  */
-int JIN_anim_update(void);
-int JIN_anim_set   (JEL_Entity entity, const char *animation);
+int jn_anim_update(void);
+int jn_anim_set   (JEL_Entity entity, const char *animation);
 
 #endif

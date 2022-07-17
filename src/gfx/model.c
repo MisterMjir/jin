@@ -15,7 +15,7 @@
  * @param fpath
  * @return
  */
-int JIN_model_create(struct JIN_Model *model, const char *fpath)
+int jn_model_create(struct jn_model *model, const char *fpath)
 {
   FILE        *file;
   float       *vertices;
@@ -66,7 +66,7 @@ int JIN_model_create(struct JIN_Model *model, const char *fpath)
  * @param model
  * @return
  */
-int JIN_model_destory(struct JIN_Model *model)
+int jn_model_destory(struct jn_model *model)
 {
   glDeleteBuffers(1, &model->vbo);
   glDeleteVertexArrays(1, &model->vao);

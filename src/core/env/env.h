@@ -18,9 +18,9 @@
   #error Platform not supported (JIN Env)
 #endif
 
-int JIN_env_init(struct JIN_Env *env);
-int JIN_env_quit(struct JIN_Env *env);
+int jn_env_init(struct jn_env *env);
+int jn_env_quit(struct jn_env *env);
 
-extern struct JIN_Env JIN_env;
+extern struct jn_env jn_env;
 
 #endif

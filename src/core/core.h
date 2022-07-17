@@ -1,7 +1,6 @@
 #ifndef JN_CORE_H
 #define JN_CORE_H
 
-#include "input/input.h"
 #include "logger/logger.h"
 #include "globals.h"
 #include "thread/thread.h"
@@ -14,9 +13,6 @@
  * Only gonna make for linux and windows
  */
 
-extern struct JIN_Input JIN_inputv; /* Volatile Input */
-extern struct JIN_Input JIN_input; /* "Frame" Input */
-
 /*
  * Core functions
  * 
@@ -26,16 +22,16 @@ extern struct JIN_Input JIN_input; /* "Frame" Input */
  * update | Game logic
  * draw   | Draw to the window
  */
-int JIN_init(void);
-int JIN_quit(void);
+int jn_init(void);
+int jn_quit(void);
 
-void JIN_tick  (void);
-int JIN_update(void);
-int JIN_draw  (void);
+void jn_tick  (void);
+int  jn_update(void);
+int  jn_draw  (void);
 
-JIN_THREAD_FN JIN_game_thread(void *);
+JN_THREAD_FN jn_game_thread(void *);
 
-int JIN_dialog(const char *msg);
+int jn_dialog(const char *msg);
 
 #ifdef __EMSCRIPTEN__
 int JIN_web_loop(void);

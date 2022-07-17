@@ -8,7 +8,7 @@
 #include <GL/glx.h>
 #include "../logger/logger.h"
 
-struct JIN_Window {
+struct jn_window {
   Window               window;
   Screen              *screen;
   GLXContext           context;

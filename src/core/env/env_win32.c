@@ -17,7 +17,7 @@ LRESULT CALLBACK default_procedure(HWND hwnd, UINT u_msg, WPARAM w_param, LPARAM
   return DefWindowProc(hwnd, u_msg, w_param, l_param);
 }
 
-int JIN_env_init(struct JIN_Env* env)
+int jn_env_init(struct jn_env *env)
 {
   /* Get the current HINSTANCE */
   if (!(env->main_instance = GetModuleHandle(NULL))) {
@@ -65,7 +65,7 @@ int JIN_env_init(struct JIN_Env* env)
   return 0;
 }
 
-int JIN_env_quit(struct JIN_Env* env)
+int jn_env_quit(struct jn_env *env)
 {
   return 0;
 }

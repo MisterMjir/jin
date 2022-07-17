@@ -53,7 +53,7 @@ void * RESM_get    (struct RESM_M *resm, const char *name);
 /*
  * JIN Functions
  */
-int    JIN_resm_add(const char *name, const char *fpath, enum RESM_T type);
-void * JIN_resm_get(const char *name);
+int    jn_resm_add(const char *name, const char *fpath, enum RESM_T type);
+void * jn_resm_get(const char *name);
 
 #endif

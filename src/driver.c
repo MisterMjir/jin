@@ -1,21 +1,22 @@
 #include "core/core.h"
 #include "core/thread/thread.h"
+#include "core/input/input.h"
 
 int main(int argc, char *args[])
 {
-  if (JIN_init()) return -1;
+  if (jn_init()) return -1;
 
-  struct JIN_Thread *game_thread;
-  if (!(game_thread = JIN_thread_create(JIN_game_thread))) {
+  struct jn_thread *game_thread;
+  if (!(game_thread = jn_thread_create(jn_game_thread))) {
     return -1;
   }
 
-  JIN_input_loop();
+  jn_input_loop();
 
-  JIN_thread_join(game_thread);
+  jn_thread_join(game_thread);
 
-  JIN_thread_destroy(game_thread);
-  JIN_quit();
+  jn_thread_destroy(game_thread);
+  jn_quit();
 
   return 0;
 }

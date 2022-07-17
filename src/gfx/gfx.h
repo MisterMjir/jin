@@ -1,5 +1,5 @@
-#ifndef JIN_GFX_H
-#define JIN_GFX_H
+#ifndef JN_GFX_H
+#define JN_GFX_H
 
 /*
  * GRAPHICS
@@ -12,9 +12,9 @@
 /*
  * GFX functions
  */
-int JIN_gfx_init(void);
-int JIN_gfx_quit(void);
-int JIN_gfx_draw_sprite(unsigned int *shader, unsigned int *texture, int x, int y, int w, int h, int t_x, int t_y, int t_w, int t_h);
+int jn_gfx_init(void);
+int jn_gfx_quit(void);
+int jn_gfx_draw_sprite(unsigned int *shader, unsigned int *texture, int x, int y, int w, int h, int t_x, int t_y, int t_w, int t_h);
 
 #include "model.h"
 #include "shader.h"

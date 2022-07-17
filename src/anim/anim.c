@@ -19,7 +19,7 @@
  */
 #define READ(var, count) \
     if (fread(var, sizeof(*var), count, file) != count) { jn_log("Could not read from .animd file"); return -1; }
-int JIN_animd_create(struct JIN_Animd *animd, const char *fpath)
+int jn_animd_create(struct jn_animd *animd, const char *fpath)
 {
   FILE   *file;
 
@@ -57,7 +57,7 @@ int JIN_animd_create(struct JIN_Animd *animd, const char *fpath)
  * @param animd
  * @return
  */
-int JIN_animd_destroy(struct JIN_Animd *animd)
+int jn_animd_destroy(struct jn_animd *animd)
 {
   free(animd->names);
   for (int32_t i = 0; i < animd->anim_nums; ++i) {
@@ -79,7 +79,7 @@ int JIN_animd_destroy(struct JIN_Animd *animd)
  * @desc
  * @return
  */
-int JIN_anim_update(void)
+int jn_anim_update(void)
 {
   struct JEL_Query q;
   JEL_QUERY(q, Animation, Sprite);
@@ -120,7 +120,7 @@ int JIN_anim_update(void)
  * @desc
  * @return
  */
-int JIN_anim_set(JEL_Entity entity, const char *animation)
+int jn_anim_set(JEL_Entity entity, const char *animation)
 {
   struct Animation a;
   JEL_GET(entity, Animation, &a);
