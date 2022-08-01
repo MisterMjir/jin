@@ -1,4 +1,4 @@
-#include "stm/states.h"
+#include "stm/states/states.h"
 
 /*
  * CORE INIT STATE
@@ -7,9 +7,7 @@
  */
 
 #define INIT_STATE_LIST \
-  X("3D",        JIN_states_create_3d) \
-  X("IMAGE",     JIN_states_create_img) \
-  X("ANIMATION", JIN_states_create_animation)
+  X("3D--", jn_states_tcnstr_3d) \
 
 static int init_states(void)
 {

@@ -50,9 +50,9 @@ int jn_init(void)
   if (JEL_init())  { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize JEL"); return -1; }
 
   /* Singletons */
-  if (RESM_create(&jn_resm))                             { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a resource manager"); return -1; }
-  if (STM_t_create(&jn_stmt))                            { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state table"); return -1; }
-  if (STM_m_create(&jn_stmm, &jn_stmt))                  { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state stack"); return -1; }
+  if (RESM_create(&jn_resm))                           { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a resource manager"); return -1; }
+  if (stm_t_create(&jn_stmt))                          { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state table"); return -1; }
+  if (stm_m_create(&jn_stmm, &jn_stmt))                { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state stack"); return -1; }
   if (snd_bgm_create(&jn_sndbgm, "res/sounds/L.wav"))  { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create background music"); return -1; }
   
   if (jn_log_core(JN_LOG_END, "Core initialized successfully")) return -1;
@@ -75,8 +75,8 @@ int jn_quit(void)
   jn_gfx_quit();
   
   snd_bgm_destroy(&jn_sndbgm);
-  STM_m_destroy(&jn_stmm);
-  STM_t_destroy(&jn_stmt);
+  stm_m_destroy(&jn_stmm);
+  stm_t_destroy(&jn_stmt);
   RESM_destroy(&jn_resm);
  
   JEL_quit();
@@ -135,10 +135,10 @@ void jn_tick(void)
 int jn_update(void)
 {
   snd_bgm_update(&jn_sndbgm);
-  if (jn_stmm.queued) {
+  if (jn_stmm.queue.status) {
     jn_stm_switch();
   }
-  STM_m_update(&jn_stmm);
+  stm_m_update(&jn_stmm);
   
   return 0;
 }
@@ -156,7 +156,7 @@ int jn_draw(void)
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  STM_m_draw(&jn_stmm);
+  stm_m_draw(&jn_stmm);
   
   jn_window_buffer_swap(root);
 
@@ -216,7 +216,7 @@ JN_THREAD_FN jn_game_thread(void *data)
 
   jn_gfx_init();
 
-  jn_stm_queue("3D", 0);
+  jn_stm_q_push("3D--", 0, NULL, 0, "00000000");
 
   snd_bgm_play();
   /* GAME LOOP */

@@ -13,8 +13,8 @@ struct Camera {
 };
 
 extern struct RESM_M  jn_resm;
-extern struct STM_T   jn_stmt;
-extern struct STM_M   jn_stmm;
+extern struct stm_t   jn_stmt;
+extern struct stm_m   jn_stmm;
 extern struct snd_bgm jn_sndbgm;
 
 #define WINDOW_WIDTH  960
