@@ -39,21 +39,21 @@ int jn_init(void)
   
   if (jn_log_init()) { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize the logger"); return -1; }
   /* Core */
-  if (jn_env_init(&jn_env))                                   { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize the environment"); return -1; }
+  if (jn_env_init(&jn_env))                                    { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize the environment"); return -1; }
   if (!(root = jn_window_create(WINDOW_WIDTH, WINDOW_HEIGHT))) { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a window"); return -1; }
 
   JN_INPUT_INIT(jn_inputv);
   JN_INPUT_INIT(jn_input);
 
   /* Libraries */
-  if (snd_init())  { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize Sound"); return -1; }
-  if (JEL_init())  { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize JEL"); return -1; }
+  if (snd_init()) { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize Sound"); return -1; }
+  if (JEL_init()) { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize JEL"); return -1; }
 
   /* Singletons */
-  if (RESM_create(&jn_resm))                           { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a resource manager"); return -1; }
-  if (stm_t_create(&jn_stmt))                          { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state table"); return -1; }
-  if (stm_m_create(&jn_stmm, &jn_stmt))                { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state stack"); return -1; }
-  if (snd_bgm_create(&jn_sndbgm, "res/sounds/L.wav"))  { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create background music"); return -1; }
+  if (RESM_create(&jn_resm))                          { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a resource manager"); return -1; }
+  if (stm_t_create(&jn_stmt))                         { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state table"); return -1; }
+  if (stm_m_create(&jn_stmm, &jn_stmt))               { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state stack"); return -1; }
+  if (snd_bgm_create(&jn_sndbgm, "res/sounds/L.wav")) { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create background music"); return -1; }
   
   if (jn_log_core(JN_LOG_END, "Core initialized successfully")) return -1;
 
@@ -90,11 +90,9 @@ int jn_quit(void)
   return 0;
 }
 
-#define FPS         30
-#define FRAME_DELAY (1000 / FPS)
+#define TICK_FREQ   (30 / 1000.0)
+#define TICK_PERIOD (1 / TICK_FREQ)
 #include <stdio.h>
-static int ticks = 0;
-static double ttime = 0;
 void jn_tick(void)
 {
   clock_t frame_start, frame_end;
@@ -107,20 +105,14 @@ void jn_tick(void)
   jn_draw();
 
   frame_end = clock();
-  frame_time = (frame_end - frame_start) / CLOCKS_PER_SEC / 1000;
+  frame_time = ((double) (frame_end - frame_start)) / CLOCKS_PER_SEC / 1000.0;
 
-  ++ticks;
-  ttime += frame_time;
-
-  if (FRAME_DELAY > frame_time) {
-    ttime += FRAME_DELAY - frame_time;
-    jn_sleep(FRAME_DELAY - frame_time);
+  if (frame_time > TICK_PERIOD) {
+    printf("STUTTER\n");
   }
 
-  if (ttime >= 1000) {
-    printf("FPS: %f\n", ticks / (ttime / 1000));
-    ticks = 0;
-    ttime = 0;
+  if (TICK_PERIOD > frame_time) {
+    jn_sleep(TICK_PERIOD - frame_time);
   }
 }
 
@@ -204,8 +196,8 @@ JN_THREAD_FN jn_game_thread(void *data)
   }
 
   /* INITIALIZE */
-  //glEnable(GL_DEBUG_OUTPUT);
-  //glDebugMessageCallback(gl_err_callback, 0);
+  glEnable(GL_DEBUG_OUTPUT);
+  glDebugMessageCallback(gl_err_callback, 0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

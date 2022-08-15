@@ -162,9 +162,9 @@ static int prepare_buffer(void *buffer, int x, int y)
 
     // TODO: Skip sprites outside of the screen
     for (JEL_EntityInt i = 1; i < q.tables[t]->count; ++i) {
-      if (pos.x[i] + sprite.w[i] < x || pos.x[i] > x + WINDOW_WIDTH ||
-          pos.y[i] + sprite.h[i] < y || pos.y[i] > y + WINDOW_HEIGHT)
-        continue;
+      //if (pos.x[i] + sprite.w[i] < x || pos.x[i] > x + WINDOW_WIDTH ||
+          //pos.y[i] + sprite.h[i] < y || pos.y[i] > y + WINDOW_HEIGHT)
+        //continue;
 
       buffer_add(buffer, sprite_num, x, y, pos.x[i], pos.y[i], sprite.w[i], sprite.h[i],
           sprite.tx[i], sprite.ty[i], sprite.tw[i], sprite.th[i], sprite.z[i], sprite.dir[i]);
@@ -192,9 +192,9 @@ static int prepare_buffer(void *buffer, int x, int y)
 
     // TODO: Skip sprites outside of the screen
     for (JEL_EntityInt i = 1; i < q.tables[t]->count; ++i) {
-      if (pos.x[i] + sprite.w[i] < x || pos.x[i] > x + WINDOW_WIDTH ||
-          pos.y[i] + sprite.h[i] < y || pos.y[i] > y + WINDOW_HEIGHT)
-        continue;
+      //if (pos.x[i] + sprite.w[i] < x || pos.x[i] > x + WINDOW_WIDTH ||
+          //pos.y[i] + sprite.h[i] < y || pos.y[i] > y + WINDOW_HEIGHT)
+        //continue;
 
       buffer_add(buffer, sprite_num, x, y, pos.x[i], pos.y[i], sprite.w[i], sprite.h[i],
           sprite.tx[i], sprite.ty[i], sprite.tw[i], sprite.th[i], sprite.z[i], sprite.dir[i]);
@@ -259,7 +259,7 @@ int JIN_gfx_sprite_draw(int x, int y)
 
 #else
 
-int JIN_gfx_sprite_draw(int x, int y)
+int jn_gfx_sprite_draw(int x, int y)
 {
   unsigned int *shader = jn_resm_get("sprite_shader");
   unsigned int *texture = jn_resm_get("spritesheet");

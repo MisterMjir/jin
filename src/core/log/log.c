@@ -61,6 +61,8 @@ int jn_log(const char *fmt, ...)
     status = -1;
   }
 
+  fflush(log_file);
+
   va_end(args);
 
   return status;

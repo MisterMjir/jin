@@ -41,6 +41,7 @@ add_executable(${PROJECT_NAME}
   
   ${CMAKE_CURRENT_LIST_DIR}/src/stm/stm.c
   ${CMAKE_CURRENT_LIST_DIR}/src/stm/states/3d.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/stm/states/sprite.c
 
   ${CMAKE_CURRENT_LIST_DIR}/libs/lodepng/lodepng.c
 )
