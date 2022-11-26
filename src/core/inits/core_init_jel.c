@@ -14,6 +14,11 @@
   X(Sprite) \
   X(Animation) \
   X(Fixed) \
+  /* Demo specific components */ \
+  X(Bullet) \
+  X(Physics) \
+  X(EnemyBullet) \
+  X(Enemy)
 
 static int init_components(void)
 {

@@ -208,9 +208,9 @@ JN_THREAD_FN jn_game_thread(void *data)
 
   jn_gfx_init();
 
-  jn_stm_q_push("3D--", 0, NULL, 0, "00000000");
+  jn_stm_q_push("DEMO", 0, NULL, 0, "00000000");
 
-  snd_bgm_play();
+  //snd_bgm_play();
   /* GAME LOOP */
   while (1) {
     if (jn_input.quit) break;

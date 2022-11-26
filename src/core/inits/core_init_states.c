@@ -8,7 +8,8 @@
 
 #define INIT_STATE_LIST \
   X("3D--", jn_states_tcnstr_3d) \
-  X("SPRT", jn_states_tcnstr_sprt)
+  X("SPRT", jn_states_tcnstr_sprt) \
+  X("DEMO", jn_states_tcnstr_demo)
 
 static int init_states(void)
 {

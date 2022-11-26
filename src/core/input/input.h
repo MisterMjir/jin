@@ -25,9 +25,15 @@ struct jn_keys {
   #undef X
 };
 
+struct jn_mouse {
+  int x;
+  int y;
+};
+
 struct jn_input {
   int quit;
   struct jn_keys keys;
+  struct jn_mouse mouse;
 };
 
 extern struct jn_input jn_inputv; /* Volatile Input */
@@ -46,6 +52,8 @@ extern struct jn_input jn_input; /* "Frame" Input */
   input.keys.p  = 0; \
   input.keys.s  = 0; \
   input.keys.w  = 0; \
+  input.mouse.x = 0; \
+  input.mouse.y = 0;
 
 /* No need to implement this */
 int jn_input_sync(struct jn_input *in, struct jn_input *in_v);

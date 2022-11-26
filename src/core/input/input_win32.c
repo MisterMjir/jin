@@ -1,6 +1,7 @@
 #include "input.h"
 #include "../core.h"
 #include <windows.h>
+#include <windowsx.h>
 
 #define SYM_LIST \
   X(f1, VK_F1) \
@@ -35,6 +36,10 @@ int jn_input_loop(void)
             SYM_LIST
           #undef X
         }
+        break;
+      case WM_MOUSEMOVE:
+        jn_inputv.mouse.x = GET_X_LPARAM(msg.lParam);
+        jn_inputv.mouse.y = GET_Y_LPARAM(msg.lParam);
         break;
     }
   }

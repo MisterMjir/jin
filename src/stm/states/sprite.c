@@ -8,7 +8,7 @@
 #include <JEL/jel.h>
 #include "components/components.h"
 
-#define ENTITY_NUM 10000
+#define ENTITY_NUM 1000000
 #define ENTITIES (*((JEL_Entity **) state->tdata))
 #define TILE_SIZE 4
 

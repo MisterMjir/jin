@@ -54,4 +54,22 @@ struct PointLight {
 };
 JEL_COMPONENT(PointLight, constant, linear, quadratic, n);
 
+struct Bullet {
+  int dummy; /* thicc */
+};
+JEL_COMPONENT(Bullet, dummy);
+
+struct EnemyBullet {
+  int dummy;
+};
+JEL_COMPONENT(EnemyBullet, dummy);
+
+struct Enemy {
+  int type;
+  int hp;
+  int state;
+  unsigned int clock;
+};
+JEL_COMPONENT(Enemy, type, hp, state, clock);
+
 #endif
