@@ -18,7 +18,8 @@
   X(Bullet) \
   X(Physics) \
   X(EnemyBullet) \
-  X(Enemy)
+  X(Enemy) \
+  X(Tile)
 
 static int init_components(void)
 {

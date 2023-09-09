@@ -1,6 +1,6 @@
 #include "window.h"
-#include <Windows.h>
-#include "../env/env.h"
+#include <windows.h>
+#include "../ctx.h"
 #include "../log/log.h"
 #include <GL/gl.h>
 #include <GL/wgl.h>
@@ -24,7 +24,7 @@ static int jn_window_gl_setup(struct jn_window *window, int w, int h)
   /* Create the temp window/context */
   HWND temp_window = CreateWindow("window_temp", "Temp Window", WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
     0, 0, 1, 1,
-    NULL, NULL, jn_env.main_instance, NULL);
+    NULL, NULL, jn_ctx.env.main_instance, NULL);
   HDC temp_device_context = GetDC(temp_window);
   PIXELFORMATDESCRIPTOR temp_pfd;
   ZeroMemory(&temp_pfd, sizeof(temp_pfd));
@@ -75,9 +75,11 @@ static int jn_window_gl_setup(struct jn_window *window, int w, int h)
 
   RECT wr = { 0, 0, w, h };
   AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX, FALSE);
-  window->handle = CreateWindow("window_core", "Hay", WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX,
-    CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
-    NULL, NULL, jn_env.main_instance, NULL);
+  jn_ctx.window_minw = wr.right - wr.left;
+  jn_ctx.window_minh = wr.bottom - wr.top;
+  window->handle = CreateWindow("window_core", "Hay", WS_OVERLAPPEDWINDOW,
+    CW_USEDEFAULT, CW_USEDEFAULT, jn_ctx.window_minw , jn_ctx.window_minh,
+    NULL, NULL, jn_ctx.env.main_instance, NULL);
 
   window->device_context = GetDC(window->handle);
 
@@ -184,7 +186,7 @@ int jn_window_gl_unset(struct jn_window *window)
 int jn_window_size_set(struct jn_window *window, int w, int h)
 {
   RECT wr = { 0, 0, w, h };
-  AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX, FALSE);
+  AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
 
   SetWindowPos(window->handle, NULL, 0, 0, wr.right - wr.left, wr.bottom - wr.top, SWP_NOMOVE | SWP_NOZORDER);
 
@@ -194,11 +196,21 @@ int jn_window_size_set(struct jn_window *window, int w, int h)
 int jn_window_size_get(struct jn_window *window, int *w, int *h)
 {
   RECT rect;
-  GetWindowRect(window->handle, &rect);
+  GetClientRect(window->handle, &rect);
 
   *w = rect.right - rect.left;
   *h = rect.bottom - rect.top;
 
+  return 0;
+}
+
+int jn_window_fs(struct jn_window *window)
+{
+  return 0;
+}
+
+int jn_window_fs_exit(struct jn_window *window)
+{
   return 0;
 }
 

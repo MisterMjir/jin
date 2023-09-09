@@ -199,13 +199,13 @@ void * RESM_get(struct RESM_M *resm, const char *name)
  * They're just wrappers but use
  * the global JIN_resm RESM_M
  */
-#include "core/globals.h"
+#include "core/ctx.h"
 int jn_resm_add(const char *name, const char *fpath, enum RESM_T type)
 {
-  return RESM_add(&jn_resm, name, fpath, type);
+  return RESM_add(&jn_ctx.resm, name, fpath, type);
 }
 
 void * jn_resm_get(const char *name)
 {
-  return RESM_get(&jn_resm, name);
+  return RESM_get(&jn_ctx.resm, name);
 }

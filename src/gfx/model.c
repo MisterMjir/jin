@@ -73,3 +73,33 @@ int jn_model_destory(struct jn_model *model)
   
   return 0;
 }
+
+/*
+ * jn_model_obj
+ * 
+ * @desc
+ *   Creates a jn_model from an obj file
+ */
+#include "core/log/log.h"
+int jn_model_obj(struct jn_model *model, const char *fpath)
+{
+  FILE        *file;
+  unsigned int vertices;
+  int          in;
+
+  if (!(file = fopen(fpath, "r"))) ERR_EXIT(-1, "Could not open .obj file: %s", fpath);
+
+  vertices = 0;
+  while (in != EOF) {
+    in = getc(file);
+    switch (in) {
+      case 'v':
+        ++vertices;
+        break;
+    }
+  }
+
+  JN_QLOG("Vertices: %u", vertices);
+  
+  return 0;
+}

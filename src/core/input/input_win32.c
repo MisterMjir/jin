@@ -8,6 +8,8 @@
   X(f2, VK_F2) \
   X(f3, VK_F3) \
   X(f4, VK_F4) \
+  X(f11, VK_F11) \
+  X(esc, VK_ESCAPE) \
   X(a,  0x41) \
   X(d,  0x44) \
   X(o,  0x4F) \

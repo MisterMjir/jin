@@ -2,9 +2,12 @@
 #include "resm/resm.h"
 #include "core/gll/gll.h"
 #include "cglm/cglm.h"
-#include "core/globals.h"
+#include "core/ctx.h"
 #include "gfx/model.h"
 #include "core/input/input.h"
+
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 360
 
 #define TICK   *(((unsigned int *) state->tdata) + 0)
 #define SHIP_X *(((int *) state->tdata) + 1)

@@ -14,5 +14,6 @@ struct jn_model {
  */
 int jn_model_create (struct jn_model *model, const char *fpath);
 int jn_model_destory(struct jn_model *model);
+int jn_model_obj    (struct jn_model *model, const char *fpath);
 
 #endif

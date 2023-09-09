@@ -54,6 +54,7 @@ struct PointLight {
 };
 JEL_COMPONENT(PointLight, constant, linear, quadratic, n);
 
+/* Demo */
 struct Bullet {
   int dummy; /* thicc */
 };
@@ -71,5 +72,12 @@ struct Enemy {
   unsigned int clock;
 };
 JEL_COMPONENT(Enemy, type, hp, state, clock);
+
+/* Platformer */
+struct Tile {
+  int type;
+  int collision;
+};
+JEL_COMPONENT(Tile, type, collision);
 
 #endif

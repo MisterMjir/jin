@@ -21,6 +21,4 @@
 int jn_env_init(struct jn_env *env);
 int jn_env_quit(struct jn_env *env);
 
-extern struct jn_env jn_env;
-
 #endif

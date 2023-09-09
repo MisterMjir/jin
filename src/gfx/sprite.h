@@ -30,6 +30,9 @@ JEL_COMPONENT(SpriteO, z, w, h, tx, ty, tw, th, dir);
 
 int jn_gfx_sprite_init(void);
 int jn_gfx_sprite_quit(void);
+int jn_gfx_sprite_active(void);
+
+int jn_gfx_sprite_resize();
 
 int jn_gfx_sprite_draw(int x, int y);
 

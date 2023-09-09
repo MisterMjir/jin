@@ -19,7 +19,7 @@ add_executable(${PROJECT_NAME}
   ${CMAKE_CURRENT_LIST_DIR}/src/anim/anim.c
   
   ${CMAKE_CURRENT_LIST_DIR}/src/core/core.c
-  ${CMAKE_CURRENT_LIST_DIR}/src/core/globals.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/core/ctx.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/env/env.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/gll/gll.c
   ${CMAKE_CURRENT_LIST_DIR}/src/core/input/input.c
@@ -43,6 +43,7 @@ add_executable(${PROJECT_NAME}
   ${CMAKE_CURRENT_LIST_DIR}/src/stm/states/3d.c
   ${CMAKE_CURRENT_LIST_DIR}/src/stm/states/sprite.c
   ${CMAKE_CURRENT_LIST_DIR}/src/stm/states/demo.c
+  ${CMAKE_CURRENT_LIST_DIR}/src/stm/states/platformer.c
 
   ${CMAKE_CURRENT_LIST_DIR}/libs/lodepng/lodepng.c
 )

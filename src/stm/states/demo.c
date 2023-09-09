@@ -2,13 +2,16 @@
 #include "resm/resm.h"
 #include "core/gll/gll.h"
 #include "cglm/cglm.h"
-#include "core/globals.h"
+#include "core/ctx.h"
 #include "gfx/sprite.h"
 #include "core/input/input.h"
 #include <JEL/jel.h>
 #include "components/components.h"
 #include "core/log/log.h"
 #include <math.h>
+
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 360
 
 #define SHIP (((JEL_Entity *) state->tdata)[0])
 #define SHIP_ALIVE (((JEL_Entity *) state->tdata)[1])

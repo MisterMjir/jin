@@ -62,6 +62,10 @@ int                 jn_window_gl_unset   (struct jn_window *);
 int                 jn_window_size_set   (struct jn_window *window, int x, int y);
 int                 jn_window_size_get   (struct jn_window *window, int *x, int *y);
 
+/* Fullscreen */
+int                 jn_window_fs         (struct jn_window *);
+int                 jn_window_fs_exit    (struct jn_window *);
+
 int                 jn_window_dialog     (struct jn_window *window, const char* msg);
 
 #endif

@@ -1,26 +1,16 @@
 #define JEL_REGISTER_COMPONENTS
 
+#define START_STATE "PLTF"
+
 #include "core.h"
 #include "gll/gll.h"
 #include "time.h"
 #include "thread/thread.h"
-#include "logger/logger.h"
 #include "input/input.h"
-
 #include "gfx/gfx.h"
-
 #include <JEL/jel.h>
-#include "../resm/resm.h"
-#include "../snd/snd.h"
-#include "../stm/stm.h"
-
-
-#include "window/window.h"
-#include "env/env.h"
+#include "ctx.h"
 #include "log/log.h"
-
-struct jn_window *root; /* Root window */
-struct jn_env     env; /* Environment variables */
 
 /* CORE FUNCTIONS */
 
@@ -39,8 +29,9 @@ int jn_init(void)
   
   if (jn_log_init()) { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize the logger"); return -1; }
   /* Core */
-  if (jn_env_init(&jn_env))                                    { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize the environment"); return -1; }
-  if (!(root = jn_window_create(WINDOW_WIDTH, WINDOW_HEIGHT))) { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a window"); return -1; }
+  if (jn_env_init(&jn_ctx.env))                          { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize the environment"); return -1; }
+  if (!(jn_ctx.window = jn_window_create(NATIVE_WIDTH, NATIVE_HEIGHT))) { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a window"); return -1; }
+  jn_ctx.resize = 0;
 
   JN_INPUT_INIT(jn_inputv);
   JN_INPUT_INIT(jn_input);
@@ -50,10 +41,10 @@ int jn_init(void)
   if (JEL_init()) { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not initialize JEL"); return -1; }
 
   /* Singletons */
-  if (RESM_create(&jn_resm))                          { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a resource manager"); return -1; }
-  if (stm_t_create(&jn_stmt))                         { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state table"); return -1; }
-  if (stm_m_create(&jn_stmm, &jn_stmt))               { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state stack"); return -1; }
-  if (snd_bgm_create(&jn_sndbgm, "res/sounds/L.wav")) { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create background music"); return -1; }
+  if (RESM_create(&jn_ctx.resm))                          { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a resource manager"); return -1; }
+  if (stm_t_create(&jn_ctx.stmt))                         { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state table"); return -1; }
+  if (stm_m_create(&jn_ctx.stmm, &jn_ctx.stmt))               { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create a state stack"); return -1; }
+  if (snd_bgm_create(&jn_ctx.sndbgm, "res/sounds/L.wav")) { jn_log_core(JN_LOG_LOG, "JIN::CORE Could not create background music"); return -1; }
   
   if (jn_log_core(JN_LOG_END, "Core initialized successfully")) return -1;
 
@@ -71,19 +62,19 @@ int jn_init(void)
 int jn_quit(void)
 {
   /* QUIT */
-  LOG(LOG, "Quitting core (closing libraries and singletons)");
+  JN_LOG("Quitting core (closing libraries and singletons)");
   jn_gfx_quit();
   
-  snd_bgm_destroy(&jn_sndbgm);
-  stm_m_destroy(&jn_stmm);
-  stm_t_destroy(&jn_stmt);
-  RESM_destroy(&jn_resm);
+  snd_bgm_destroy(&jn_ctx.sndbgm);
+  stm_m_destroy(&jn_ctx.stmm);
+  stm_t_destroy(&jn_ctx.stmt);
+  RESM_destroy(&jn_ctx.resm);
  
   JEL_quit();
   snd_quit();
 
-  jn_window_destroy(root);
-  jn_env_quit(&jn_env);
+  jn_window_destroy(jn_ctx.window);
+  jn_env_quit(&jn_ctx.env);
 
   jn_log_quit();
 
@@ -126,11 +117,11 @@ void jn_tick(void)
  */
 int jn_update(void)
 {
-  snd_bgm_update(&jn_sndbgm);
-  if (jn_stmm.queue.status) {
+  snd_bgm_update(&jn_ctx.sndbgm);
+  if (jn_ctx.stmm.queue.status) {
     jn_stm_switch();
   }
-  stm_m_update(&jn_stmm);
+  stm_m_update(&jn_ctx.stmm);
   
   return 0;
 }
@@ -145,12 +136,27 @@ int jn_update(void)
  */
 int jn_draw(void)
 {
+  if (jn_input.keys.f11) {
+    jn_window_fs(jn_ctx.window);
+    jn_ctx.resize = 1;
+  }
+
+  if (jn_input.keys.esc) {
+    jn_window_fs_exit(jn_ctx.window);
+    jn_ctx.resize = 1;
+  }
+
+  if (jn_ctx.resize) {
+    jn_gfx_sprite_resize();
+    jn_ctx.resize = 0;
+  }
+
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  stm_m_draw(&jn_stmm);
+  stm_m_draw(&jn_ctx.stmm);
   
-  jn_window_buffer_swap(root);
+  jn_window_buffer_swap(jn_ctx.window);
 
   return 0;
 }
@@ -189,7 +195,7 @@ void GLAPIENTRY gl_err_callback(GLenum src, GLenum type, GLuint id, GLenum sever
 
 JN_THREAD_FN jn_game_thread(void *data)
 {
-  jn_window_gl_set(root);
+  jn_window_gl_set(jn_ctx.window);
   if (JIN_gll()) {
     LOG(ERR, "JIN_gll() failed");
     jn_input.quit = 1;
@@ -208,7 +214,7 @@ JN_THREAD_FN jn_game_thread(void *data)
 
   jn_gfx_init();
 
-  jn_stm_q_push("DEMO", 0, NULL, 0, "00000000");
+  jn_stm_q_push(START_STATE, 0, NULL, 0, "00000000");
 
   //snd_bgm_play();
   /* GAME LOOP */
@@ -217,7 +223,7 @@ JN_THREAD_FN jn_game_thread(void *data)
     jn_tick();
   }
 
-  jn_window_gl_unset(root);
+  jn_window_gl_unset(jn_ctx.window);
   
   return 0;
 }

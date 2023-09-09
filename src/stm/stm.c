@@ -467,23 +467,23 @@ int stm_m_switch(struct stm_m *manager)
 /*
  * JIN functions
  */
-#include "core/globals.h"
+#include "core/ctx.h"
 int jn_stm_q_push(stm_n name, enum stm_f sflags, void* data, size_t size, stm_c cflags)
 {
-  return stm_m_q_push(&jn_stmm, name, sflags, data, size, cflags);
+  return stm_m_q_push(&jn_ctx.stmm, name, sflags, data, size, cflags);
 }
 
 void jn_stm_q_pop(stm_c flags)
 {
-  stm_m_q_pop(&jn_stmm, flags);
+  stm_m_q_pop(&jn_ctx.stmm, flags);
 }
 
 int jn_stm_switch(void)
 {
-  return stm_m_switch(&jn_stmm);
+  return stm_m_switch(&jn_ctx.stmm);
 }
 
 int jn_stm_add(stm_n name, stm_create constructor)
 {
-  return stm_t_add(&jn_stmt, name, constructor);
+  return stm_t_add(&jn_ctx.stmt, name, constructor);
 }

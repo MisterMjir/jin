@@ -9,5 +9,3 @@
 #else
   #error Platform not supported (JIN Env)
 #endif
-
-struct jn_env jn_env;

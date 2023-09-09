@@ -97,7 +97,7 @@ int snd_sfx_destroy(struct snd_sfx *sfx)
 
 /* BGM FUNCTIONS */
 
-#include "../core/globals.h"
+#include "core/ctx.h"
 
 /*
  * snd_bgm_update
@@ -183,7 +183,7 @@ int snd_bgm_create(struct snd_bgm *bgm, const char *fpath)
   alSource3f(bgm->source, AL_VELOCITY, 0, 0, 0);
   alSourcei(bgm->source, AL_LOOPING, AL_FALSE);
 
-  alSourceQueueBuffers(jn_sndbgm.source, BUFFERS_NUM, jn_sndbgm.buffers);
+  alSourceQueueBuffers(jn_ctx.sndbgm.source, BUFFERS_NUM, jn_ctx.sndbgm.buffers);
 
   return 0;
 }
@@ -215,8 +215,8 @@ int snd_bgm_destroy(struct snd_bgm *bgm)
  */
 int snd_bgm_set(const char *fpath)
 {
-  snd_bgm_destroy(&jn_sndbgm);
-  snd_bgm_create(&jn_sndbgm, fpath);
+  snd_bgm_destroy(&jn_ctx.sndbgm);
+  snd_bgm_create(&jn_ctx.sndbgm, fpath);
   
   return 0;
 }
@@ -229,7 +229,7 @@ int snd_bgm_set(const char *fpath)
  */
 int snd_bgm_play(void)
 {
-  alSourcePlay(jn_sndbgm.source);
+  alSourcePlay(jn_ctx.sndbgm.source);
 
   return 0;
 }
@@ -242,7 +242,7 @@ int snd_bgm_play(void)
  */
 int snd_bgm_stop(void)
 {
-  alSourcePause(jn_sndbgm.source);
+  alSourcePause(jn_ctx.sndbgm.source);
 
   return 0;
 }
@@ -256,7 +256,7 @@ int snd_bgm_stop(void)
 int snd_bgm_state(void)
 {
   ALenum state;
-  alGetSourcei(jn_sndbgm.source, AL_SOURCE_STATE, &state);
+  alGetSourcei(jn_ctx.sndbgm.source, AL_SOURCE_STATE, &state);
 
   return state == AL_PLAYING;
 }

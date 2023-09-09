@@ -1,8 +1,6 @@
 #ifndef JN_CORE_H
 #define JN_CORE_H
 
-#include "logger/logger.h"
-#include "globals.h"
 #include "thread/thread.h"
 
 /*

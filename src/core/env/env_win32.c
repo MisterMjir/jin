@@ -1,9 +1,17 @@
 #include "env.h"
 #include "../log/log.h"
+#include "../ctx.h"
 
 LRESULT CALLBACK window_procedure(HWND hwnd, UINT u_msg, WPARAM w_param, LPARAM l_param)
 {
   switch (u_msg) {
+    case WM_GETMINMAXINFO:
+      ((LPMINMAXINFO) l_param)->ptMinTrackSize.x = jn_ctx.window_minw;
+      ((LPMINMAXINFO) l_param)->ptMinTrackSize.y = jn_ctx.window_minh;
+      break;
+    case WM_SIZE:
+      jn_ctx.resize = 1;
+      break;
     case WM_DESTROY:
       PostQuitMessage(0);
       return 0;

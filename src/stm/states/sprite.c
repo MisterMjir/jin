@@ -2,15 +2,16 @@
 #include "resm/resm.h"
 #include "core/gll/gll.h"
 #include "cglm/cglm.h"
-#include "core/globals.h"
+#include "core/ctx.h"
 #include "gfx/sprite.h"
 #include "core/input/input.h"
 #include <JEL/jel.h>
 #include "components/components.h"
+#include "core/ctx.h"
 
-#define ENTITY_NUM 1000000
+#define ENTITY_NUM 593
 #define ENTITIES (*((JEL_Entity **) state->tdata))
-#define TILE_SIZE 4
+#define TILE_SIZE 20
 
 void sprt_destroy(struct stm_s* state) {}
 
@@ -18,7 +19,7 @@ int sprt_init(struct stm_s *state, stm_c flags)
 {
   state->tdata = malloc(sizeof(JEL_Entity **));
 
-  ENTITIES = malloc(sizeof(JEL_Entity) * ENTITY_NUM);
+  ENTITIES = malloc(sizeof(JEL_Entity) * (ENTITY_NUM + 1));
 
   int x = 0, y = 0;
   for (unsigned int i = 0; i < ENTITY_NUM; ++i) {
@@ -27,11 +28,15 @@ int sprt_init(struct stm_s *state, stm_c flags)
     JEL_SET(ENTITIES[i], Sprite, 0, TILE_SIZE, TILE_SIZE, 0, 0, 16, 16, 0);
     
     x += TILE_SIZE;
-    if (x > WINDOW_WIDTH) {
+    if (x > 640) {
       x = 0;
       y += TILE_SIZE;
     }
   }
+
+  ENTITIES[ENTITY_NUM] = JEL_entity_create();
+  JEL_SET(ENTITIES[ENTITY_NUM], Position, 0, 0);
+  JEL_SET(ENTITIES[ENTITY_NUM], Sprite, 10, NATIVE_WIDTH, NATIVE_HEIGHT, 0, 0, 640, 360, 0);
 
   return 0;
 }
@@ -41,6 +46,8 @@ void sprt_quit(struct stm_s *state)
   for (int i = 0; i < ENTITY_NUM; ++i) {
     JEL_entity_destroy(ENTITIES[i]);
   }
+
+  JEL_entity_destroy(ENTITIES[ENTITY_NUM]);
 
   free(state->tdata);
 }

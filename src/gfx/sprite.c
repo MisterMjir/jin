@@ -3,7 +3,7 @@
 #include "resm/resm.h"
 #include "core/gll/gll.h"
 #include "cglm/cglm.h"
-#include "core/globals.h"
+#include "core/ctx.h"
 
 #include "core/logger/logger.h"
 
@@ -35,6 +35,8 @@ unsigned int sprite_indices[MAX_SPRITES * 6];
 float buffer[VERTEX_ATTRIBS * MAX_SPRITES * 4];
 #endif
 
+int active = 0;
+
 int jn_gfx_sprite_init(void)
 {
   /* Set up indices */
@@ -56,9 +58,9 @@ int jn_gfx_sprite_init(void)
   glUseProgram(*shader);
 
   mat4 projection;
-  glm_ortho(0.0f, (float) WINDOW_WIDTH, (float) WINDOW_HEIGHT, 0.0f, MIN_Z, MAX_Z, projection);
+  glm_ortho(0.0f, (float) NATIVE_WIDTH, (float) NATIVE_HEIGHT, 0.0f, MIN_Z, MAX_Z, projection);
   glUniformMatrix4fv(glGetUniformLocation(*shader, "projection"), 1, GL_FALSE, (float *) projection);
-  glUniform1f(glGetUniformLocation(*shader, "lighting"), 0.0f);
+  glUniform1f(glGetUniformLocation(*shader, "scale"), 1.0f);
   /* GL objects */
   glGenVertexArrays(1, &sprite_vao);
   glGenBuffers(1, &sprite_vbo);
@@ -85,6 +87,8 @@ int jn_gfx_sprite_init(void)
 
   glBindVertexArray(0);
  
+  active = 1;
+
   return 0;
 }
 
@@ -96,7 +100,36 @@ int jn_gfx_sprite_quit(void)
   glDeleteBuffers(1, &sprite_vbo);
   glDeleteBuffers(1, &sprite_ebo);
   glDeleteVertexArrays(1, &sprite_vao);
+  
+  active = 0;
 
+  return 0;
+}
+
+int jn_gfx_sprite_active(void)
+{
+  return active;
+}
+
+#include "core/log/log.h"
+int jn_gfx_sprite_resize()
+{  
+  int w, h;
+  int scale = 1;
+
+  jn_window_size_get(jn_ctx.window, &w, &h);
+
+  int w_scale = w / NATIVE_WIDTH;
+  int h_scale = h / NATIVE_HEIGHT;
+
+  if (w_scale > h_scale) {
+    scale = h_scale;
+  }
+  else {
+    scale = w_scale;
+  }
+
+  glViewport((w - NATIVE_WIDTH * scale) / 2, (h - NATIVE_HEIGHT * scale) / 2, NATIVE_WIDTH * scale, NATIVE_HEIGHT * scale);
   return 0;
 }
 
